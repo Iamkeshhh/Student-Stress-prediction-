@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-import base64
 
 # ---------------------------------------------------
 # PAGE CONFIG
@@ -35,71 +34,10 @@ df = load_data()
 # SIDEBAR
 # ---------------------------------------------------
 
-autoplay_background_video("Background.mp4")
 
 st.sidebar.title("🧠 Mental Health Analytics")
 
 page = "Student Analysis"
-
-def autoplay_background_video(video_path):
-
-    video_file = open(video_path, "rb")
-    video_bytes = video_file.read()
-    encoded = base64.b64encode(video_bytes).decode()
-
-    st.markdown(
-        f"""
-        <style>
-
-        .hero {{
-            position: relative;
-            width: 100%;
-            height: 450px;
-            overflow: hidden;
-            border-radius: 20px;
-            margin-bottom: 25px;
-        }}
-
-        .hero video {{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }}
-
-        .hero-text {{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            text-align: center;
-            background: rgba(0,0,0,0.4);
-            padding: 20px 40px;
-            border-radius: 15px;
-        }}
-
-        .hero-text h1 {{
-            font-size: 3rem;
-            margin-bottom:10px;
-        }}
-
-        </style>
-
-        <div class="hero">
-
-            <video autoplay loop muted playsinline>
-                <source src="data:video/mp4;base64,{encoded}" type="video/mp4">
-            </video>
-
-            <div class="hero-text">
-                <h1>🧠 AI Student Mental Health Analytics</h1>
-                <p>Early Detection • Risk Assessment • Smart Recommendations</p>
-            </div>
-
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
 
     # Student Name Column
     student_column = "Student_Name"
