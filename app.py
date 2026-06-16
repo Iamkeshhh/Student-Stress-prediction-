@@ -179,6 +179,13 @@ elif page == "Student Analysis":
     else:
         st.error("HIGH RISK STUDENT")
 
+    if risk == "HIGH":
+
+    if st.button("📅 Book Counseling Session"):
+        st.success(
+            "Counseling request submitted to Student Wellness Center."
+        )
+
 
     st.subheader("💡 Personalized Wellness Action Plan")
 
