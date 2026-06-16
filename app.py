@@ -245,7 +245,7 @@ elif page == "Student Analysis":
     else:
         st.error("HIGH RISK STUDENT")
 
-    if risk == "LOW":
+if risk == "LOW":
 
     st.success("LOW RISK STUDENT")
 
