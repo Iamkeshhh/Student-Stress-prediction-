@@ -98,7 +98,7 @@ def load_data():
 
 df = load_data()
 
-autoplay_background_video("Background.mp4")
+    autoplay_background_video("Background.mp4")
 
     # Student Name Column
     student_column = "Student_Name"
