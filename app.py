@@ -1,6 +1,74 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+import base64
+
+def autoplay_background_video(video_path):
+
+    with open(video_path, "rb") as video_file:
+        video_bytes = video_file.read()
+
+    encoded = base64.b64encode(video_bytes).decode()
+
+    st.markdown(
+        f"""
+        <style>
+
+        .video-banner {{
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }}
+
+        .video-banner video {{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }}
+
+        .banner-text {{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            background: rgba(0,0,0,0.45);
+            padding: 20px 40px;
+            border-radius: 15px;
+        }}
+
+        .banner-text h1 {{
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }}
+
+        .banner-text p {{
+            font-size: 1.2rem;
+        }}
+
+        </style>
+
+        <div class="video-banner">
+
+            <video autoplay muted loop playsinline>
+                <source src="data:video/mp4;base64,{encoded}" type="video/mp4">
+            </video>
+
+            <div class="banner-text">
+                <h1>🧠 AI Student Mental Health Analytics</h1>
+                <p>
+                Early Detection • Risk Assessment • Personalized Recommendations
+                </p>
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 # ---------------------------------------------------
 # PAGE CONFIG
@@ -30,54 +98,7 @@ def load_data():
 
 df = load_data()
 
-# ---------------------------------------------------
-# SIDEBAR
-# ---------------------------------------------------
-
-st.sidebar.title("🧠 Mental Health Analytics")
-
-page = st.sidebar.radio(
-    "Navigation",
-    [
-        "Home",
-        "Student Analysis"
-    ]
-)
-
-# ---------------------------------------------------
-# HOME
-# ---------------------------------------------------
-
-if page == "Home":
-
-    st.title("🎓 AI Powered Student Mental Health Platform")
-
-    c1, c2, c3, c4 = st.columns(4)
-
-    c1.metric("Students", len(df))
-    c2.metric("Features", len(df.columns))
-
-    c3.metric(
-        "High Stress",
-        len(df[df["stress_level"] == 2])
-    )
-
-    c4.metric(
-        "Low Stress",
-        len(df[df["stress_level"] == 0])
-    )
-
-    st.info(
-        "Use the Student Analysis page to view complete student profiles and recommendations."
-    )
-
-# ---------------------------------------------------
-# STUDENT ANALYSIS
-# ---------------------------------------------------
-
-elif page == "Student Analysis":
-
-    st.title("🎯 Student Mental Health Analyzer")
+autoplay_background_video("Background.mp4")
 
     # Student Name Column
     student_column = "Student_Name"
