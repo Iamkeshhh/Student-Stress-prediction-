@@ -168,11 +168,11 @@ st.divider()
 
 # ---------------------------------------------------
 
- if risk_score < 15:
+if risk_score < 15:
     risk = "LOW"
- elif risk_score < 30:
+elif risk_score < 30:
     risk = "MEDIUM"
- else:
+else:
     risk = "HIGH"
 
 # ---------------------------------------------------
