@@ -1,39 +1,25 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 st.set_page_config(
     page_title="AI Student Mental Health Analytics",
     page_icon="🧠",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
 
-# ---------------- CUSTOM CSS ---------------- #
+# ---------------- CSS ---------------- #
 
 st.markdown("""
 <style>
-
 [data-testid="stAppViewContainer"]{
     background:#0E1117;
+}
+
+h1,h2,h3,p,div{
     color:white;
 }
-
-.metric-card{
-    background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(15px);
-    padding:20px;
-    border-radius:20px;
-    text-align:center;
-}
-
-.big-font{
-    font-size:40px;
-    font-weight:bold;
-    color:#00D4FF;
-}
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -45,123 +31,69 @@ def load_data():
 
 df = load_data()
 
-# ---------------- SIDEBAR ---------------- #
-
-st.sidebar.image(
-    "https://cdn-icons-png.flaticon.com/512/4320/4320337.png",
-    width=120
-)
-
-st.sidebar.title("AI Mental Health Analytics")
-
-st.sidebar.info("""
-Navigate using the Pages menu.
-
-Student Portal
-Faculty Dashboard
-Stress Analytics
-Explainable AI
-Recommendations
-Reports
-""")
-
 # ---------------- TITLE ---------------- #
 
-st.markdown(
-    "<p class='big-font'>🧠 AI Student Mental Health Analytics Platform</p>",
-    unsafe_allow_html=True
-)
+st.title("🧠 AI Student Mental Health Analytics Platform")
 
-st.markdown("""
-Early detection of student stress using
-Machine Learning, XGBoost and Deep Learning.
-""")
+st.write(
+    "Early detection of student stress using Machine Learning and XGBoost."
+)
 
 # ---------------- KPI SECTION ---------------- #
 
 total_students = len(df)
 
-high_stress = len(
-    df[df["stress_level"] == 2]
-)
+high_stress = len(df[df["stress_level"] == 2])
 
-medium_stress = len(
-    df[df["stress_level"] == 1]
-)
+medium_stress = len(df[df["stress_level"] == 1])
 
-low_stress = len(
-    df[df["stress_level"] == 0]
-)
+low_stress = len(df[df["stress_level"] == 0])
 
-avg_anxiety = round(
-    df["anxiety_level"].mean(),
-    2
-)
+avg_anxiety = round(df["anxiety_level"].mean(),2)
 
-col1,col2,col3,col4,col5 = st.columns(5)
+c1,c2,c3,c4,c5 = st.columns(5)
 
-with col1:
-    st.metric(
-        "Students",
-        total_students
-    )
-
-with col2:
-    st.metric(
-        "High Stress",
-        high_stress
-    )
-
-with col3:
-    st.metric(
-        "Medium Stress",
-        medium_stress
-    )
-
-with col4:
-    st.metric(
-        "Low Stress",
-        low_stress
-    )
-
-with col5:
-    st.metric(
-        "Avg Anxiety",
-        avg_anxiety
-    )
+c1.metric("Students", total_students)
+c2.metric("High Stress", high_stress)
+c3.metric("Medium Stress", medium_stress)
+c4.metric("Low Stress", low_stress)
+c5.metric("Avg Anxiety", avg_anxiety)
 
 st.divider()
 
-# ---------------- CHARTS ---------------- #
+# ---------------- STRESS DISTRIBUTION ---------------- #
 
-left,right = st.columns(2)
+col1,col2 = st.columns(2)
 
-with left:
+with col1:
 
-    fig = px.histogram(
-        df,
+    st.subheader("Stress Distribution")
+
+    fig,ax = plt.subplots(figsize=(6,4))
+
+    sns.countplot(
         x="stress_level",
-        color="stress_level",
-        title="Stress Distribution"
+        data=df,
+        ax=ax
     )
 
-    st.plotly_chart(
-        fig,
-        use_container_width=True
+    st.pyplot(fig)
+
+with col2:
+
+    st.subheader("Stress Level Percentage")
+
+    counts = df["stress_level"].value_counts()
+
+    fig2,ax2 = plt.subplots(figsize=(5,5))
+
+    ax2.pie(
+        counts,
+        labels=counts.index,
+        autopct="%1.1f%%"
     )
 
-with right:
-
-    fig2 = px.pie(
-        df,
-        names="stress_level",
-        title="Stress Level Share"
-    )
-
-    st.plotly_chart(
-        fig2,
-        use_container_width=True
-    )
+    st.pyplot(fig2)
 
 # ---------------- TOP STRESS FACTORS ---------------- #
 
@@ -176,28 +108,25 @@ stress_factors = [
     "academic_performance"
 ]
 
-means = []
-
-for col in stress_factors:
-    means.append(df[col].mean())
+means = [df[col].mean() for col in stress_factors]
 
 factor_df = pd.DataFrame({
     "Factor":stress_factors,
     "Value":means
 })
 
-fig3 = px.bar(
-    factor_df,
+fig3,ax3 = plt.subplots(figsize=(8,4))
+
+sns.barplot(
     x="Factor",
     y="Value",
-    color="Value",
-    title="Average Impact Factors"
+    data=factor_df,
+    ax=ax3
 )
 
-st.plotly_chart(
-    fig3,
-    use_container_width=True
-)
+plt.xticks(rotation=30)
+
+st.pyplot(fig3)
 
 # ---------------- WELLNESS INDEX ---------------- #
 
@@ -207,29 +136,24 @@ wellness = round(
     100 -
     (
         (
-            df["anxiety_level"].mean() +
-            df["depression"].mean() +
-            df["peer_pressure"].mean()
+            df["anxiety_level"].mean()
+            + df["depression"].mean()
+            + df["peer_pressure"].mean()
         ) / 3
     ) * 10,
     2
 )
 
-fig4 = go.Figure(go.Indicator(
-    mode="gauge+number",
-    value=wellness,
-    title={"text":"Wellness Score"},
-    gauge={
-        "axis":{"range":[0,100]}
-    }
-))
-
-st.plotly_chart(
-    fig4,
-    use_container_width=True
+st.metric(
+    "Overall Wellness Score",
+    f"{wellness}%"
 )
 
-# ---------------- RISK ALERTS ---------------- #
+progress = int(wellness)
+
+st.progress(progress)
+
+# ---------------- EARLY WARNING SYSTEM ---------------- #
 
 st.subheader("Faculty Early Warning System")
 
@@ -243,7 +167,8 @@ st.error(
 )
 
 st.dataframe(
-    critical.head(20)
+    critical.head(20),
+    use_container_width=True
 )
 
 # ---------------- MODEL COMPARISON ---------------- #
@@ -267,18 +192,34 @@ model_df = pd.DataFrame({
     ]
 })
 
-fig5 = px.bar(
-    model_df,
+fig4,ax4 = plt.subplots(figsize=(8,4))
+
+sns.barplot(
     x="Model",
     y="Accuracy",
-    color="Accuracy",
-    title="Model Comparison"
+    data=model_df,
+    ax=ax4
 )
 
-st.plotly_chart(
-    fig5,
-    use_container_width=True
+plt.xticks(rotation=20)
+
+st.pyplot(fig4)
+
+# ---------------- CORRELATION HEATMAP ---------------- #
+
+st.subheader("Feature Correlation Heatmap")
+
+corr = df.corr(numeric_only=True)
+
+fig5,ax5 = plt.subplots(figsize=(12,8))
+
+sns.heatmap(
+    corr,
+    cmap="coolwarm",
+    ax=ax5
 )
+
+st.pyplot(fig5)
 
 # ---------------- FOOTER ---------------- #
 
@@ -295,7 +236,7 @@ st.markdown("""
 
 ✅ Recommendation Engine
 
-✅ Risk Ranking
+✅ Student Risk Ranking
 
 ✅ Wellness Score
 
@@ -303,5 +244,5 @@ st.markdown("""
 
 ✅ PDF Report Generation
 
-✅ XGBoost + Deep Learning
+✅ XGBoost + Deep Learning Comparison
 """)
