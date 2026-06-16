@@ -293,9 +293,6 @@ https://www.calm.com/
 If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
 """)
 
-    st.subheader("💡 Personalized Recommendations")
-
-
 
     # ---------------------------------------------------
     # COMPLETE STUDENT DETAILS
