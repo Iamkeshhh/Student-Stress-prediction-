@@ -110,7 +110,7 @@ st.subheader("🎓 Select Student")
 
 autoplay_background_video("Background.mp4")
 
-    st.title("🎯 Student Mental Health Analyzer")
+st.title("🎯 Student Mental Health Analyzer")
 
     # Student Name Column
     student_column = "Student_Name"
