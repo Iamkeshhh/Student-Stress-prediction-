@@ -88,7 +88,7 @@ elif page == "Student Risk Analyzer":
         "name",
         "Name",
         "Student_Name",
-        "StudentName"
+        "Student_Name"
     ]
 
     for col in possible_names:
