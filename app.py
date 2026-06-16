@@ -2,6 +2,26 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
+def autoplay_video(video_path):
+
+    with open(video_path, "rb") as file:
+        video_bytes = file.read()
+
+    encoded = base64.b64encode(video_bytes).decode()
+
+    st.markdown(
+        f"""
+        <video width="100%"
+               autoplay
+               muted
+               loop
+               playsinline>
+            <source src="data:video/mp4;base64,{encoded}" type="video/mp4">
+        </video>
+        """,
+        unsafe_allow_html=True
+    )
+
 # ---------------------------------------------------
 # PAGE CONFIG
 # ---------------------------------------------------
@@ -131,7 +151,13 @@ elif page == "Student Analysis":
 
     st.subheader("🧠 Stress Risk Gauge")
 
-    gauge_max = 50
+    left, right = st.columns([1.2, 1])
+
+# ==========================================
+# LEFT SIDE - GAUGE
+# ==========================================
+
+with left:
 
     fig = go.Figure(
         go.Indicator(
@@ -139,7 +165,7 @@ elif page == "Student Analysis":
             value=risk_score,
             title={"text": "Stress Risk Score"},
             gauge={
-                "axis": {"range": [0, gauge_max]},
+                "axis": {"range": [0, 50]},
                 "bar": {"color": "darkred"},
                 "steps": [
                     {"range": [0, 15], "color": "lightgreen"},
@@ -154,6 +180,32 @@ elif page == "Student Analysis":
         fig,
         use_container_width=True
     )
+
+# ==========================================
+# RIGHT SIDE - VIDEO
+# ==========================================
+
+with right:
+
+    st.subheader("🎥 Wellness Guidance")
+
+    if risk == "LOW":
+
+        st.success("LOW RISK")
+
+        autoplay_video("low stress.mp4")
+
+    elif risk == "MEDIUM":
+
+        st.warning("MEDIUM RISK")
+
+        autoplay_video("medium stress.mp4")
+
+    else:
+
+        st.error("HIGH RISK")
+
+        autoplay_video("high stress.mp4")
 
     # ---------------------------------------------------
     # RISK CATEGORY
