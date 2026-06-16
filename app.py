@@ -35,9 +35,9 @@ df = load_data()
 # ---------------------------------------------------
 
 
-st.sidebar.title("🧠 Mental Health Analytics")
+    st.sidebar.title("🧠 Mental Health Analytics")
 
-page = "Student Analysis"
+    page = "Student Analysis"
 
     # Student Name Column
     student_column = "Student_Name"
