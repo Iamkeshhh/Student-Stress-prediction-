@@ -98,191 +98,222 @@ def load_data():
 
 df = load_data()
 
-    autoplay_background_video("Background.mp4")
+autoplay_background_video("Background.mp4")
 
-    # Student Name Column
-    student_column = "Student_Name"
+# ---------------------------------------------------
 
-    # Student Dropdown
-    selected_student = st.selectbox(
-        "Select Student",
-        sorted(df[student_column].dropna().unique())
-    )
+# STUDENT ANALYSIS
 
-    # Student Record
-    student = df[df[student_column] == selected_student].iloc[0]
+# ---------------------------------------------------
 
-    # ---------------------------------------------------
-    # PROFILE HEADER
-    # ---------------------------------------------------
+student_column = "Student_Name"
 
-    st.markdown("## 👤 Student Profile")
+selected_student = st.selectbox(
+"Select Student",
+sorted(df[student_column].dropna().unique())
+)
 
-    col1, col2, col3 = st.columns(3)
+student = df[df[student_column] == selected_student].iloc[0]
 
-    col1.metric(
-        "Student Name",
-        student["Student_Name"]
-    )
+# ---------------------------------------------------
 
-    col2.metric(
-        "Dataset Stress Level",
-        int(student["stress_level"])
-    )
+# PROFILE HEADER
 
-    risk_score = (
-        student["anxiety_level"]
-        + student["depression"]
-        + student["peer_pressure"]
-        + student["bullying"]
-        + student["future_career_concerns"]
-        - student["sleep_quality"]
-    )
+# ---------------------------------------------------
 
-    col3.metric(
-        "Risk Score",
-        round(risk_score, 1)
-    )
+st.markdown("## 👤 Student Profile")
 
-    st.divider()
+col1, col2, col3 = st.columns(3)
 
-    # ---------------------------------------------------
-    # GAUGE CHART
-    # ---------------------------------------------------
+col1.metric(
+"Student Name",
+student["Student_Name"]
+)
 
-    st.subheader("🧠 Stress Risk Gauge")
+col2.metric(
+"Dataset Stress Level",
+int(student["stress_level"])
+)
 
-    gauge_max = 50
+risk_score = (
+student["anxiety_level"]
++ student["depression"]
++ student["peer_pressure"]
++ student["bullying"]
++ student["future_career_concerns"]
+- student["sleep_quality"]
+)
 
-    fig = go.Figure(
-        go.Indicator(
-            mode="gauge+number",
-            value=risk_score,
-            title={"text": "Stress Risk Score"},
-            gauge={
-                "axis": {"range": [0, gauge_max]},
-                "bar": {"color": "darkred"},
-                "steps": [
-                    {"range": [0, 15], "color": "lightgreen"},
-                    {"range": [15, 30], "color": "yellow"},
-                    {"range": [30, 50], "color": "salmon"}
-                ]
-            }
-        )
-    )
+col3.metric(
+"Risk Score",
+round(risk_score, 1)
+)
 
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
+st.divider()
 
-    # ---------------------------------------------------
-    # RISK CATEGORY
-    # ---------------------------------------------------
+# ---------------------------------------------------
 
-    if risk_score < 15:
-        risk = "LOW"
+# RISK CATEGORY
 
-    elif risk_score < 30:
-        risk = "MEDIUM"
+# ---------------------------------------------------
 
-    else:
-        risk = "HIGH"
+if risk_score < 15:
+risk = "LOW"
+elif risk_score < 30:
+risk = "MEDIUM"
+else:
+risk = "HIGH"
 
-    st.subheader("🚨 Risk Assessment")
+# ---------------------------------------------------
 
-    if risk == "LOW":
-        st.success("LOW RISK STUDENT")
+# GAUGE CHART
 
-    elif risk == "MEDIUM":
-        st.warning("MEDIUM RISK STUDENT")
+# ---------------------------------------------------
 
-    else:
-        st.error("HIGH RISK STUDENT")
+st.subheader("🧠 Stress Risk Gauge")
 
+gauge_max = 50
 
-    # ---------------------------------------------------
-    # RECOMMENDATIONS
-    # ---------------------------------------------------
+fig = go.Figure(
+go.Indicator(
+mode="gauge+number",
+value=risk_score,
+title={"text": "Stress Risk Score"},
+gauge={
+"axis": {"range": [0, gauge_max]},
+"bar": {"color": "darkred"},
+"steps": [
+{"range": [0, 15], "color": "lightgreen"},
+{"range": [15, 30], "color": "yellow"},
+{"range": [30, 50], "color": "salmon"}
+]
+}
+)
+)
 
-    st.subheader("💡 Personalized Recommendations")
+st.plotly_chart(
+fig,
+use_container_width=True
+)
 
-    if risk == "LOW":
+# ---------------------------------------------------
 
-        st.success("""
-        ✅ Maintain current healthy habits
+# RISK RESULT
 
-        ✅ Continue regular exercise
+# ---------------------------------------------------
 
-        ✅ Participate in extracurricular activities
+st.subheader("🚨 Risk Assessment")
 
-        ✅ Maintain good sleep schedule
+if risk == "LOW":
+st.success("LOW RISK STUDENT")
 
-        ✅ Stay socially connected
-        """)
+elif risk == "MEDIUM":
+st.warning("MEDIUM RISK STUDENT")
 
-    elif risk == "MEDIUM":
+else:
+st.error("HIGH RISK STUDENT")
 
-        st.warning("""
-        ⚠ Improve sleep quality
+# ---------------------------------------------------
 
-        ⚠ Reduce study overload
+# RECOMMENDATIONS
 
-        ⚠ Practice mindfulness
+# ---------------------------------------------------
 
-        ⚠ Seek peer support
+st.subheader("💡 Personalized Recommendations")
 
-        ⚠ Monitor stress regularly
-        """)
+if risk == "LOW":
 
-    else:
+```
+st.success("""
+```
 
-        st.error("""
-        🚨 Immediate counseling recommended
+✅ Maintain current healthy habits
 
-        🚨 Faculty intervention advised
+✅ Continue regular exercise
 
-        🚨 Reduce academic pressure
+✅ Participate in extracurricular activities
 
-        🚨 Increase social support
+✅ Maintain good sleep schedule
 
-        🚨 Regular mental health monitoring
+✅ Stay socially connected
+""")
 
-        🚨 Professional psychologist consultation
-        """)
+elif risk == "MEDIUM":
 
-    st.divider()
+```
+st.warning("""
+```
 
-    # ---------------------------------------------------
-    # COMPLETE STUDENT DETAILS
-    # ---------------------------------------------------
+⚠ Improve sleep quality
 
-    st.subheader("📋 Complete Student Information")
+⚠ Reduce study overload
 
-    details = pd.DataFrame({
-        "Feature": student.index,
-        "Value": student.values
-    })
+⚠ Practice mindfulness
 
-    st.dataframe(
-        details,
-        use_container_width=True,
-        hide_index=True
-    )
+⚠ Seek peer support
 
-    st.divider()
+⚠ Monitor stress regularly
+""")
 
-    # ---------------------------------------------------
-    # FEATURE ANALYSIS
-    # ---------------------------------------------------
+else:
 
-    st.subheader("📊 Student Mental Health Factors")
+```
+st.error("""
+```
 
-    numeric_features = student.drop(
-        labels=["Student_Name"]
-    )
+🚨 Immediate counseling recommended
 
-    numeric_features = pd.to_numeric(
-        numeric_features,
-        errors="coerce"
-    ).dropna()
+🚨 Faculty intervention advised
+
+🚨 Reduce academic pressure
+
+🚨 Increase social support
+
+🚨 Regular mental health monitoring
+
+🚨 Professional psychologist consultation
+""")
+
+st.divider()
+
+# ---------------------------------------------------
+
+# COMPLETE STUDENT DETAILS
+
+# ---------------------------------------------------
+
+st.subheader("📋 Complete Student Information")
+
+details = pd.DataFrame({
+"Feature": student.index,
+"Value": student.values
+})
+
+st.dataframe(
+details,
+use_container_width=True,
+hide_index=True
+)
+
+st.divider()
+
+# ---------------------------------------------------
+
+# FEATURE ANALYSIS
+
+# ---------------------------------------------------
+
+st.subheader("📊 Student Mental Health Factors")
+
+numeric_features = student.drop(
+labels=["Student_Name"]
+)
+
+numeric_features = pd.to_numeric(
+numeric_features,
+errors="coerce"
+).dropna()
+
+st.bar_chart(numeric_features)
+
+   
