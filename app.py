@@ -179,13 +179,6 @@ elif page == "Student Analysis":
     else:
         st.error("HIGH RISK STUDENT")
 
-    if risk == "HIGH":
-
-    if st.button("📅 Book Counseling Session"):
-        st.success(
-            "Counseling request submitted to Student Wellness Center."
-        )
-
 
     st.subheader("💡 Personalized Wellness Action Plan")
 
@@ -296,6 +289,54 @@ https://www.calm.com/
 If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
 """)
 
+    st.subheader("💡 Personalized Recommendations")
+
+if risk == "LOW":
+    ...
+    
+elif risk == "MEDIUM":
+    ...
+
+else:
+    ...
+
+# =====================================================
+# COUNSELING CONSULTATION FORM
+# =====================================================
+
+if risk in ["MEDIUM", "HIGH"]:
+
+    st.markdown("---")
+    st.subheader("📅 Request Counseling Support")
+
+    with st.form("consultation_form"):
+
+        student_email = st.text_input(
+            "Student Email"
+        )
+
+        preferred_date = st.date_input(
+            "Preferred Consultation Date"
+        )
+
+        concern = st.text_area(
+            "Describe Your Concern"
+        )
+
+        submitted = st.form_submit_button(
+            "Submit Counseling Request"
+        )
+
+        if submitted:
+
+            st.success(
+                "✅ Counseling request submitted successfully."
+            )
+
+            st.info(
+                "The student wellness team will contact you soon."
+            )
+
     # ---------------------------------------------------
     # COMPLETE STUDENT DETAILS
     # ---------------------------------------------------
@@ -315,17 +356,4 @@ If the student expresses thoughts of self-harm or immediate danger, contact loca
 
     st.divider()
 
-    # ---------------------------------------------------
-    # FEATURE ANALYSIS
-    # ---------------------------------------------------
-
-    st.subheader("📊 Student Mental Health Factors")
-
-    numeric_features = student.drop(
-        labels=["Student_Name"]
-    )
-
-    numeric_features = pd.to_numeric(
-        numeric_features,
-        errors="coerce"
-    ).dropna()
+    
