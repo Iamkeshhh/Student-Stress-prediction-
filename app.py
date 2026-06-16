@@ -25,7 +25,6 @@ layout="wide"
 def load_data():
  df = pd.read_csv("StressLevelDataset.csv")
 
-```
 # Remove unnamed columns
 df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
 
@@ -33,7 +32,7 @@ df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
 df.columns = df.columns.str.strip()
 
 return df
-```
+
 
 df = load_data()
 
@@ -45,7 +44,7 @@ df = load_data()
 
 def autoplay_background_video(video_path):
 
-```
+
 with open(video_path, "rb") as file:
     video_bytes = file.read()
 
@@ -110,7 +109,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-```
 
 # =====================================================
 
@@ -120,7 +118,7 @@ st.markdown(
 
 def autoplay_video(video_path):
 
-```
+
 with open(video_path, "rb") as file:
     video_bytes = file.read()
 
@@ -141,7 +139,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-```
+
 
 # =====================================================
 
@@ -161,21 +159,21 @@ student_column = None
 
 for col in df.columns:
 
-```
+
 if "name" in col.lower():
     student_column = col
     break
-```
+
 
 if student_column is None:
 
-```
+
 st.error(
     f"Student name column not found.\nAvailable Columns: {list(df.columns)}"
 )
 
 st.stop()
-```
+
 
 # =====================================================
 
@@ -214,23 +212,21 @@ col1, col2 = st.columns(2)
 
 with col1:
 
-```
 st.metric(
     "Student Name",
     selected_student
 )
-```
 
 with col2:
 
-```
+
 if "stress_level" in df.columns:
 
     st.metric(
         "Dataset Stress Level",
         int(student["stress_level"])
     )
-```
+
 
 # =====================================================
 
@@ -250,7 +246,6 @@ risk_features = [
 
 for feature in risk_features:
 
-```
 if feature in df.columns:
 
     try:
@@ -259,18 +254,18 @@ if feature in df.columns:
         )
     except:
         pass
-```
+
 
 if "sleep_quality" in df.columns:
 
-```
+
 try:
     risk_score -= float(
         student["sleep_quality"]
     )
 except:
     pass
-```
+
 
 risk_score = max(
 risk_score,
@@ -285,21 +280,20 @@ risk_score,
 
 if risk_score < 15:
 
-```
+
 risk = "LOW"
-```
+
 
 elif risk_score < 30:
 
-```
 risk = "MEDIUM"
-```
+
 
 else:
 
-```
+
 risk = "HIGH"
-```
+
 
 # =====================================================
 
@@ -313,7 +307,7 @@ left, right = st.columns([1.2, 1])
 
 with left:
 
-```
+
 st.subheader(
     "🧠 Mental Health Risk Gauge"
 )
@@ -361,11 +355,11 @@ st.plotly_chart(
     fig,
     use_container_width=True
 )
-```
+
 
 with right:
 
-```
+
 st.subheader(
     "🎥 Wellness Guidance"
 )
@@ -399,7 +393,7 @@ else:
     autoplay_video(
         "high stress.mp4"
     )
-```
+
 
 # =====================================================
 
@@ -415,9 +409,9 @@ st.subheader(
 
 if risk == "LOW":
 
-```
+
 st.success("""
-```
+
 
 ✅ Maintain current healthy lifestyle
 
@@ -432,9 +426,9 @@ st.success("""
 
 elif risk == "MEDIUM":
 
-```
+
 st.warning("""
-```
+
 
 ⚠ Improve sleep quality
 
@@ -449,9 +443,9 @@ st.warning("""
 
 else:
 
-```
+
 st.error("""
-```
+
 
 🚨 Immediate counselling recommended
 
@@ -507,7 +501,7 @@ numeric_features = {}
 
 for col in df.columns:
 
-```
+
 try:
 
     numeric_features[col] = float(
@@ -516,11 +510,11 @@ try:
 
 except:
     pass
-```
+
 
 if len(numeric_features) > 0:
 
-```
+
 chart_df = pd.DataFrame(
     {
         "Feature":
@@ -536,4 +530,3 @@ st.bar_chart(
         "Feature"
     )
 )
-```
