@@ -108,7 +108,7 @@ page = "Student Analysis"
 # Student Analysis Code Starts Here
 st.subheader("🎓 Select Student")
 
-    autoplay_background_video("Background.mp4")
+autoplay_background_video("Background.mp4")
 
     st.title("🎯 Student Mental Health Analyzer")
 
