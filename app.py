@@ -2,6 +2,10 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
+LOW_VIDEO = "low stress.mp4"
+MEDIUM_VIDEO = "medium stress.mp4"
+HIGH_VIDEO = "high stress.mp4"
+
 # ---------------------------------------------------
 # PAGE CONFIG
 # ---------------------------------------------------
@@ -10,6 +14,68 @@ st.set_page_config(
     page_title="AI Student Mental Health Platform",
     page_icon="🧠",
     layout="wide"
+)
+
+import base64
+
+# ---------- BACKGROUND HERO VIDEO ----------
+
+video_file = open("Background.mp4", "rb")
+video_bytes = video_file.read()
+video_base64 = base64.b64encode(video_bytes).decode()
+
+st.markdown(
+    f"""
+    <style>
+
+    .video-container {{
+        position: relative;
+        width: 100%;
+        height: 450px;
+        overflow: hidden;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }}
+
+    .video-container video {{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }}
+
+    .video-text {{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        text-align: center;
+        background: rgba(0,0,0,0.45);
+        padding: 20px;
+        border-radius: 15px;
+    }}
+
+    .video-text h1 {{
+        font-size: 42px;
+    }}
+
+    </style>
+
+    <div class="video-container">
+
+        <video autoplay muted loop>
+            <source src="data:video/mp4;base64,{video_base64}" type="video/mp4">
+        </video>
+
+        <div class="video-text">
+            <h1>🧠 AI Student Mental Health Analytics</h1>
+            <p>Early Detection • Risk Assessment • Personalized Recommendations</p>
+        </div>
+
+    </div>
+
+    """,
+    unsafe_allow_html=True
 )
 
 # ---------------------------------------------------
@@ -178,6 +244,24 @@ elif page == "Student Analysis":
 
     else:
         st.error("HIGH RISK STUDENT")
+
+    if risk == "LOW":
+
+    st.success("LOW RISK STUDENT")
+
+    st.video(LOW_VIDEO)
+
+elif risk == "MEDIUM":
+
+    st.warning("MEDIUM RISK STUDENT")
+
+    st.video(MEDIUM_VIDEO)
+
+else:
+
+    st.error("HIGH RISK STUDENT")
+
+    st.video(HIGH_VIDEO)
 
     # ---------------------------------------------------
     # RECOMMENDATIONS
