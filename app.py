@@ -1,12 +1,16 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
+import plotly.graph_objects as go
+
+# ---------------- PAGE CONFIG ----------------
 
 st.set_page_config(
-    page_title="AI Student Mental Health Platform",
+    page_title="AI Mental Health Platform",
     page_icon="🧠",
     layout="wide"
 )
+
+# ---------------- LOAD DATA ----------------
 
 @st.cache_data
 def load_data():
@@ -14,229 +18,325 @@ def load_data():
 
 df = load_data()
 
-# ---------- SIDEBAR ----------
+# ---------------- SIDEBAR ----------------
 
-st.sidebar.title("🧠 Mental Health Platform")
+st.sidebar.title("🧠 AI Mental Health Platform")
 
 page = st.sidebar.radio(
-    "Navigate",
+    "Navigation",
     [
         "Home",
-        "Student Assessment",
-        "Faculty Dashboard",
-        "Student Explorer",
-        "Recommendations"
+        "Student Risk Analyzer"
     ]
 )
 
-# ---------- HOME ----------
+# ==================================================
+# HOME
+# ==================================================
 
 if page == "Home":
 
-    st.title("AI-Powered Student Mental Health Analytics")
+    st.title("🎓 AI Powered Student Mental Health Analytics")
 
     c1,c2,c3,c4 = st.columns(4)
 
-    c1.metric("Students", len(df))
-    c2.metric("Features", len(df.columns)-1)
-    c3.metric(
-        "High Stress",
-        len(df[df["stress_level"] == 2])
-    )
-    c4.metric(
-        "Low Stress",
-        len(df[df["stress_level"] == 0])
+    c1.metric(
+        "Total Students",
+        len(df)
     )
 
-    st.info(
-        "Use the sidebar to switch between modules."
+    c2.metric(
+        "Features",
+        len(df.columns)
     )
 
-# ---------- STUDENT ASSESSMENT ----------
+    if "stress_level" in df.columns:
 
-elif page == "Student Assessment":
-
-    st.title("🎓 Student Assessment")
-
-    tab1, tab2 = st.tabs(
-        ["Personal Details", "Mental Health Inputs"]
-    )
-
-    with tab1:
-
-        student_name = st.text_input(
-            "Student Name"
+        c3.metric(
+            "High Risk",
+            len(df[df["stress_level"] == 2])
         )
 
-        age = st.number_input(
-            "Age",
-            16,
-            40,
-            20
+        c4.metric(
+            "Low Risk",
+            len(df[df["stress_level"] == 0])
         )
 
-        department = st.selectbox(
-            "Department",
-            [
-                "CSE",
-                "ECE",
-                "EEE",
-                "MECH",
-                "MBA"
-            ]
-        )
+    st.markdown("---")
 
-    with tab2:
+    st.info("""
+This platform helps faculty identify students
+who may require mental health support.
 
-        anxiety = st.slider(
-            "Anxiety Level",
-            0,
-            10,
-            5
-        )
+Select **Student Risk Analyzer** from the sidebar.
+""")
 
-        depression = st.slider(
-            "Depression",
-            0,
-            10,
-            5
-        )
+# ==================================================
+# STUDENT ANALYZER
+# ==================================================
 
-        peer_pressure = st.slider(
-            "Peer Pressure",
-            0,
-            10,
-            5
-        )
+elif page == "Student Risk Analyzer":
 
-        sleep_quality = st.slider(
-            "Sleep Quality",
-            0,
-            10,
-            5
-        )
+    st.title("🎯 Student Risk Analyzer")
 
-        bullying = st.slider(
-            "Bullying",
-            0,
-            10,
-            5
-        )
+    # ---------------- Student Selection ----------------
 
-    if st.button("Evaluate Student"):
+    student_column = None
 
-        score = (
-            anxiety +
-            depression +
-            peer_pressure +
-            bullying
-        ) - sleep_quality
-
-        if score < 10:
-            level = "Low Stress"
-        elif score < 20:
-            level = "Medium Stress"
-        else:
-            level = "High Stress"
-
-        st.success(
-            f"Predicted Stress Level: {level}"
-        )
-
-# ---------- FACULTY DASHBOARD ----------
-
-elif page == "Faculty Dashboard":
-
-    st.title("🏫 Faculty Dashboard")
-
-    stress_filter = st.selectbox(
-        "Stress Level",
-        sorted(df["stress_level"].unique())
-    )
-
-    filtered = df[
-        df["stress_level"] == stress_filter
+    possible_names = [
+        "student_name",
+        "name",
+        "Name",
+        "Student_Name",
+        "StudentName"
     ]
 
-    st.write(
-        f"Students in selected category: {len(filtered)}"
+    for col in possible_names:
+        if col in df.columns:
+            student_column = col
+            break
+
+    if student_column is None:
+        st.error(
+            "No student name column found.\nPlease rename it as 'student_name'"
+        )
+        st.stop()
+
+    selected_student = st.selectbox(
+        "Select Student",
+        sorted(df[student_column].unique())
+    )
+
+    student = df[
+        df[student_column] == selected_student
+    ].iloc[0]
+
+    # ==================================================
+    # PROFILE SECTION
+    # ==================================================
+
+    st.markdown("## 👤 Student Profile")
+
+    col1,col2,col3 = st.columns(3)
+
+    col1.metric(
+        "Student",
+        selected_student
+    )
+
+    if "age" in df.columns:
+        col2.metric(
+            "Age",
+            student["age"]
+        )
+
+    if "stress_level" in df.columns:
+        col3.metric(
+            "Dataset Stress",
+            student["stress_level"]
+        )
+
+    st.markdown("---")
+
+    # ==================================================
+    # SHOW ALL DETAILS
+    # ==================================================
+
+    st.subheader("📋 Complete Student Details")
+
+    details_df = pd.DataFrame(
+        {
+            "Feature": student.index,
+            "Value": student.values
+        }
     )
 
     st.dataframe(
-        filtered,
+        details_df,
+        use_container_width=True,
+        hide_index=True
+    )
+
+    # ==================================================
+    # CALCULATE RISK SCORE
+    # ==================================================
+
+    risk_score = 0
+
+    risk_features = [
+        "anxiety_level",
+        "depression",
+        "self_esteem",
+        "mental_health_history",
+        "peer_pressure",
+        "academic_pressure",
+        "bullying"
+    ]
+
+    for feature in risk_features:
+
+        if feature in df.columns:
+
+            try:
+                risk_score += float(student[feature])
+            except:
+                pass
+
+    if risk_score <= 10:
+        risk = "LOW"
+        gauge_color = "green"
+
+    elif risk_score <= 20:
+        risk = "MEDIUM"
+        gauge_color = "orange"
+
+    else:
+        risk = "HIGH"
+        gauge_color = "red"
+
+    # ==================================================
+    # GAUGE CHART
+    # ==================================================
+
+    st.subheader("🧠 Mental Health Risk Gauge")
+
+    fig = go.Figure(
+        go.Indicator(
+            mode="gauge+number",
+            value=risk_score,
+            title={
+                "text":"Stress Risk Score"
+            },
+            gauge={
+                "axis":{"range":[0,30]},
+                "bar":{"color":gauge_color},
+
+                "steps":[
+                    {
+                        "range":[0,10],
+                        "color":"lightgreen"
+                    },
+                    {
+                        "range":[10,20],
+                        "color":"yellow"
+                    },
+                    {
+                        "range":[20,30],
+                        "color":"salmon"
+                    }
+                ]
+            }
+        )
+    )
+
+    st.plotly_chart(
+        fig,
         use_container_width=True
     )
 
-# ---------- STUDENT EXPLORER ----------
+    # ==================================================
+    # RISK STATUS
+    # ==================================================
 
-elif page == "Student Explorer":
+    st.subheader("🚨 Risk Assessment")
 
-    st.title("🔍 Student Explorer")
+    if risk == "LOW":
 
-    student_index = st.selectbox(
-        "Select Student",
-        df.index
-    )
+        st.success(
+            "LOW RISK STUDENT"
+        )
 
-    student = df.loc[student_index]
+    elif risk == "MEDIUM":
 
-    st.subheader("Student Details")
+        st.warning(
+            "MEDIUM RISK STUDENT"
+        )
 
-    st.write(student)
+    else:
 
-    feature = st.selectbox(
-        "Feature",
-        df.columns
-    )
+        st.error(
+            "HIGH RISK STUDENT"
+        )
 
-    st.metric(
-        feature,
-        student[feature]
-    )
+    # ==================================================
+    # RECOMMENDATIONS
+    # ==================================================
 
-# ---------- RECOMMENDATIONS ----------
+    st.subheader("💡 Personalized Recommendations")
 
-elif page == "Recommendations":
-
-    st.title("💡 Recommendations")
-
-    stress_choice = st.selectbox(
-        "Stress Category",
-        [
-            "Low",
-            "Medium",
-            "High"
-        ]
-    )
-
-    if stress_choice == "Low":
+    if risk == "LOW":
 
         st.success("""
-Maintain current lifestyle
+✅ Continue healthy lifestyle
 
-Continue exercise
+✅ Maintain good sleep
 
-Maintain social interactions
+✅ Participate in activities
+
+✅ Continue social engagement
+
+✅ Regular exercise
 """)
 
-    elif stress_choice == "Medium":
+    elif risk == "MEDIUM":
 
         st.warning("""
-Improve sleep quality
+⚠ Improve sleep quality
 
-Reduce study overload
+⚠ Reduce academic overload
 
-Practice mindfulness
+⚠ Practice mindfulness
+
+⚠ Time management training
+
+⚠ Peer mentoring support
 """)
 
     else:
 
         st.error("""
-Seek counselling support
+🚨 Immediate counselling recommended
 
-Reduce academic burden
+🚨 Faculty intervention required
 
-Increase social support
+🚨 Reduce academic pressure
 
-Monitor mental health regularly
+🚨 Frequent mental health monitoring
+
+🚨 Connect with support groups
+
+🚨 Schedule psychologist consultation
 """)
+
+    # ==================================================
+    # FEATURE VISUALIZATION
+    # ==================================================
+
+    st.markdown("---")
+    st.subheader("📊 Student Feature Analysis")
+
+    numeric_data = []
+
+    numeric_cols = []
+
+    for col in df.columns:
+
+        try:
+            value = float(student[col])
+
+            numeric_cols.append(col)
+            numeric_data.append(value)
+
+        except:
+            pass
+
+    chart_df = pd.DataFrame(
+        {
+            "Feature": numeric_cols,
+            "Value": numeric_data
+        }
+    )
+
+    st.bar_chart(
+        chart_df.set_index("Feature")
+    )
