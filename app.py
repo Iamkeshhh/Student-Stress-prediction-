@@ -121,18 +121,18 @@ selected_student = st.selectbox(
      sorted(df[student_column].dropna().unique())
     )
 
-    # Student Record
-    student = df[df[student_column] == selected_student].iloc[0]
+# Student Record
+student = df[df[student_column] == selected_student].iloc[0]
 
     # ---------------------------------------------------
     # PROFILE HEADER
     # ---------------------------------------------------
 
-    st.markdown("## 👤 Student Profile")
+ st.markdown("## 👤 Student Profile")
 
-    col1, col2, col3 = st.columns(3)
+ col1, col2, col3 = st.columns(3)
 
-    col1.metric(
+  col1.metric(
         "Student Name",
         student["Student_Name"]
     )
