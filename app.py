@@ -224,7 +224,7 @@ st.subheader("💡 Personalized Recommendations")
 if risk == "LOW":
 
 ```
-  st.success("""
+st.success("""
 ```
 
 ✅ Maintain current healthy habits
@@ -241,7 +241,7 @@ if risk == "LOW":
 elif risk == "MEDIUM":
 
 ```
-  st.warning("""
+st.warning("""
 ```
 
 ⚠ Improve sleep quality
@@ -258,7 +258,7 @@ elif risk == "MEDIUM":
 else:
 
 ```
-  st.error("""
+st.error("""
 ```
 
 🚨 Immediate counseling recommended
