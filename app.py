@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+import base64
 
 # ---------------------------------------------------
 # PAGE CONFIG
@@ -11,6 +12,66 @@ st.set_page_config(
     page_icon="🧠",
     layout="wide"
 )
+
+def autoplay_background_video(video_path):
+
+    video_file = open(video_path, "rb")
+    video_bytes = video_file.read()
+    encoded = base64.b64encode(video_bytes).decode()
+
+    st.markdown(
+        f"""
+        <style>
+
+        .hero {{
+            position: relative;
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }}
+
+        .hero video {{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }}
+
+        .hero-text {{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            background: rgba(0,0,0,0.4);
+            padding: 20px 40px;
+            border-radius: 15px;
+        }}
+
+        .hero-text h1 {{
+            font-size: 3rem;
+            margin-bottom:10px;
+        }}
+
+        </style>
+
+        <div class="hero">
+
+            <video autoplay loop muted playsinline>
+                <source src="data:video/mp4;base64,{encoded}" type="video/mp4">
+            </video>
+
+            <div class="hero-text">
+                <h1>🧠 AI Student Mental Health Analytics</h1>
+                <p>Early Detection • Risk Assessment • Smart Recommendations</p>
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 # ---------------------------------------------------
 # LOAD DATA
@@ -36,46 +97,15 @@ df = load_data()
 
 st.sidebar.title("🧠 Mental Health Analytics")
 
-page = st.sidebar.radio(
-    "Navigation",
-    [
-        "Home",
-        "Student Analysis"
-    ]
-)
-
-# ---------------------------------------------------
-# HOME
-# ---------------------------------------------------
-
-if page == "Home":
-
-    st.title("🎓 AI Powered Student Mental Health Platform")
-
-    c1, c2, c3, c4 = st.columns(4)
-
-    c1.metric("Students", len(df))
-    c2.metric("Features", len(df.columns))
-
-    c3.metric(
-        "High Stress",
-        len(df[df["stress_level"] == 2])
-    )
-
-    c4.metric(
-        "Low Stress",
-        len(df[df["stress_level"] == 0])
-    )
-
-    st.info(
-        "Use the Student Analysis page to view complete student profiles and recommendations."
-    )
+page = "Student Analysis"
 
 # ---------------------------------------------------
 # STUDENT ANALYSIS
 # ---------------------------------------------------
 
 elif page == "Student Analysis":
+
+    autoplay_background_video("Background.mp4")
 
     st.title("🎯 Student Mental Health Analyzer")
 
@@ -129,32 +159,38 @@ elif page == "Student Analysis":
     # GAUGE CHART
     # ---------------------------------------------------
 
-    st.subheader("🧠 Stress Risk Gauge")
+   st.subheader("Mental Health Assessment")
 
-    gauge_max = 50
+   left, right = st.columns([1.2, 1])
 
-    fig = go.Figure(
-        go.Indicator(
-            mode="gauge+number",
-            value=risk_score,
-            title={"text": "Stress Risk Score"},
-            gauge={
-                "axis": {"range": [0, gauge_max]},
-                "bar": {"color": "darkred"},
-                "steps": [
-                    {"range": [0, 15], "color": "lightgreen"},
-                    {"range": [15, 30], "color": "yellow"},
-                    {"range": [30, 50], "color": "salmon"}
-                ]
-            }
-        )
+   with left: 
+
+       fig = go.Figure(
+    go.Indicator(
+        mode="gauge+number",
+        value=risk_score,
+        title={"text": "Stress Risk Score"},
+        gauge={
+            "axis": {"range": [0, 50]},
+            "bar": {"color": "darkred"},
+            "steps": [
+                {"range": [0, 15], "color": "#90EE90"},
+                {"range": [15, 30], "color": "#FFD700"},
+                {"range": [30, 50], "color": "#FF7F7F"}
+            ]
+        }
     )
+)
 
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
+st.plotly_chart(
+    fig,
+    use_container_width=True
+)
 
+    with right:
+
+        st.subheader("Guidance Video")
+    
     # ---------------------------------------------------
     # RISK CATEGORY
     # ---------------------------------------------------
@@ -171,13 +207,58 @@ elif page == "Student Analysis":
     st.subheader("🚨 Risk Assessment")
 
     if risk == "LOW":
-        st.success("LOW RISK STUDENT")
+
+    st.success("LOW RISK")
+
+    video_file = open("low stress.mp4", "rb")
+    video_bytes = video_file.read()
+
+    video_base64 = base64.b64encode(video_bytes).decode()
+
+    st.markdown(
+        f"""
+        <video width="100%" autoplay muted loop playsinline>
+            <source src="data:video/mp4;base64,{video_base64}" type="video/mp4">
+        </video>
+        """,
+        unsafe_allow_html=True
+    )
 
     elif risk == "MEDIUM":
-        st.warning("MEDIUM RISK STUDENT")
+
+    st.warning("MEDIUM RISK")
+
+    video_file = open("medium stress.mp4", "rb")
+    video_bytes = video_file.read()
+
+    video_base64 = base64.b64encode(video_bytes).decode()
+
+    st.markdown(
+        f"""
+        <video width="100%" autoplay muted loop playsinline>
+            <source src="data:video/mp4;base64,{video_base64}" type="video/mp4">
+        </video>
+        """,
+        unsafe_allow_html=True
+    )
 
     else:
-        st.error("HIGH RISK STUDENT")
+
+    st.error("HIGH RISK")
+
+    video_file = open("high stress.mp4", "rb")
+    video_bytes = video_file.read()
+
+    video_base64 = base64.b64encode(video_bytes).decode()
+
+    st.markdown(
+        f"""
+        <video width="100%" autoplay muted loop playsinline>
+            <source src="data:video/mp4;base64,{video_base64}" type="video/mp4">
+        </video>
+        """,
+        unsafe_allow_html=True
+    )
 
 
     # ---------------------------------------------------
