@@ -116,59 +116,79 @@ st.title("🎯 Student Mental Health Analyzer")
 student_column = "Student_Name"
 
 # Student Dropdown
+
 selected_student = st.selectbox(
-    "Select Student",
-     sorted(df[student_column].dropna().unique())
-    )
+"Select Student",
+sorted(df[student_column].dropna().unique())
+)
 
 # Student Record
+
 student = df[df[student_column] == selected_student].iloc[0]
 
-    # ---------------------------------------------------
-    # PROFILE HEADER
-    # ---------------------------------------------------
+# ---------------------------------------------------
 
- st.markdown("## 👤 Student Profile")
+# PROFILE HEADER
 
- col1, col2, col3 = st.columns(3)
+# ---------------------------------------------------
 
-  col1.metric(
-        "Student Name",
-        student["Student_Name"]
-    )
+st.markdown("## 👤 Student Profile")
 
-    col2.metric(
-        "Dataset Stress Level",
-        int(student["stress_level"])
-    )
+col1, col2, col3 = st.columns(3)
 
-    risk_score = (
-        student["anxiety_level"]
-        + student["depression"]
-        + student["peer_pressure"]
-        + student["bullying"]
-        + student["future_career_concerns"]
-        - student["sleep_quality"]
-    )
+col1.metric(
+"Student Name",
+selected_student
+)
 
-    col3.metric(
-        "Risk Score",
-        round(risk_score, 1)
-    )
+col2.metric(
+"Dataset Stress Level",
+int(student["stress_level"])
+)
 
-    st.divider()
+risk_score = (
+student["anxiety_level"]
++ student["depression"]
++ student["peer_pressure"]
++ student["bullying"]
++ student["future_career_concerns"]
+- student["sleep_quality"]
+)
 
-    # ---------------------------------------------------
-    # GAUGE CHART
-    # ---------------------------------------------------
+col3.metric(
+"Risk Score",
+round(risk_score, 1)
+)
 
-   st.subheader("Mental Health Assessment")
+st.divider()
 
-   left, right = st.columns([1.2, 1])
+# ---------------------------------------------------
 
-   with left: 
+# RISK CATEGORY
 
-       fig = go.Figure(
+# ---------------------------------------------------
+
+if risk_score < 15:
+risk = "LOW"
+elif risk_score < 30:
+risk = "MEDIUM"
+else:
+risk = "HIGH"
+
+# ---------------------------------------------------
+
+# GAUGE + VIDEO
+
+# ---------------------------------------------------
+
+st.subheader("Mental Health Assessment")
+
+left, right = st.columns([1.2, 1])
+
+with left:
+
+```
+fig = go.Figure(
     go.Indicator(
         mode="gauge+number",
         value=risk_score,
@@ -189,34 +209,23 @@ st.plotly_chart(
     fig,
     use_container_width=True
 )
+```
 
-    with right:
+with right:
 
-        st.subheader("Guidance Video")
-    
-    # ---------------------------------------------------
-    # RISK CATEGORY
-    # ---------------------------------------------------
+```
+st.subheader("🎥 Guidance Video")
 
-    if risk_score < 15:
-        risk = "LOW"
-
-    elif risk_score < 30:
-        risk = "MEDIUM"
-
-    else:
-        risk = "HIGH"
-
-    st.subheader("🚨 Risk Assessment")
-
-    if risk == "LOW":
+if risk == "LOW":
 
     st.success("LOW RISK")
 
-    video_file = open("low stress.mp4", "rb")
-    video_bytes = video_file.read()
+    with open("low stress.mp4", "rb") as video_file:
+        video_bytes = video_file.read()
 
-    video_base64 = base64.b64encode(video_bytes).decode()
+    video_base64 = base64.b64encode(
+        video_bytes
+    ).decode()
 
     st.markdown(
         f"""
@@ -227,14 +236,16 @@ st.plotly_chart(
         unsafe_allow_html=True
     )
 
-    elif risk == "MEDIUM":
+elif risk == "MEDIUM":
 
     st.warning("MEDIUM RISK")
 
-    video_file = open("medium stress.mp4", "rb")
-    video_bytes = video_file.read()
+    with open("medium stress.mp4", "rb") as video_file:
+        video_bytes = video_file.read()
 
-    video_base64 = base64.b64encode(video_bytes).decode()
+    video_base64 = base64.b64encode(
+        video_bytes
+    ).decode()
 
     st.markdown(
         f"""
@@ -245,14 +256,16 @@ st.plotly_chart(
         unsafe_allow_html=True
     )
 
-    else:
+else:
 
     st.error("HIGH RISK")
 
-    video_file = open("high stress.mp4", "rb")
-    video_bytes = video_file.read()
+    with open("high stress.mp4", "rb") as video_file:
+        video_bytes = video_file.read()
 
-    video_base64 = base64.b64encode(video_bytes).decode()
+    video_base64 = base64.b64encode(
+        video_bytes
+    ).decode()
 
     st.markdown(
         f"""
@@ -262,90 +275,109 @@ st.plotly_chart(
         """,
         unsafe_allow_html=True
     )
+```
 
+# ---------------------------------------------------
 
-    # ---------------------------------------------------
-    # RECOMMENDATIONS
-    # ---------------------------------------------------
+# RECOMMENDATIONS
 
-    st.subheader("💡 Personalized Recommendations")
+# ---------------------------------------------------
 
-    if risk == "LOW":
+st.divider()
 
-        st.success("""
-        ✅ Maintain current healthy habits
+st.subheader("💡 Personalized Recommendations")
 
-        ✅ Continue regular exercise
+if risk == "LOW":
 
-        ✅ Participate in extracurricular activities
+```
+st.success("""
+```
 
-        ✅ Maintain good sleep schedule
+✅ Maintain current healthy habits
 
-        ✅ Stay socially connected
-        """)
+✅ Continue regular exercise
 
-    elif risk == "MEDIUM":
+✅ Participate in extracurricular activities
 
-        st.warning("""
-        ⚠ Improve sleep quality
+✅ Maintain good sleep schedule
 
-        ⚠ Reduce study overload
+✅ Stay socially connected
+""")
 
-        ⚠ Practice mindfulness
+elif risk == "MEDIUM":
 
-        ⚠ Seek peer support
+```
+st.warning("""
+```
 
-        ⚠ Monitor stress regularly
-        """)
+⚠ Improve sleep quality
 
-    else:
+⚠ Reduce study overload
 
-        st.error("""
-        🚨 Immediate counseling recommended
+⚠ Practice mindfulness
 
-        🚨 Faculty intervention advised
+⚠ Seek peer support
 
-        🚨 Reduce academic pressure
+⚠ Monitor stress regularly
+""")
 
-        🚨 Increase social support
+else:
 
-        🚨 Regular mental health monitoring
+```
+st.error("""
+```
 
-        🚨 Professional psychologist consultation
-        """)
+🚨 Immediate counseling recommended
 
-    st.divider()
+🚨 Faculty intervention advised
 
-    # ---------------------------------------------------
-    # COMPLETE STUDENT DETAILS
-    # ---------------------------------------------------
+🚨 Reduce academic pressure
 
-    st.subheader("📋 Complete Student Information")
+🚨 Increase social support
 
-    details = pd.DataFrame({
-        "Feature": student.index,
-        "Value": student.values
-    })
+🚨 Regular mental health monitoring
 
-    st.dataframe(
-        details,
-        use_container_width=True,
-        hide_index=True
-    )
+🚨 Professional psychologist consultation
+""")
 
-    st.divider()
+# ---------------------------------------------------
 
-    # ---------------------------------------------------
-    # FEATURE ANALYSIS
-    # ---------------------------------------------------
+# COMPLETE STUDENT DETAILS
 
-    st.subheader("📊 Student Mental Health Factors")
+# ---------------------------------------------------
 
-    numeric_features = student.drop(
-        labels=["Student_Name"]
-    )
+st.divider()
 
-    numeric_features = pd.to_numeric(
-        numeric_features,
-        errors="coerce"
-    ).dropna()
+st.subheader("📋 Complete Student Information")
+
+details = pd.DataFrame({
+"Feature": student.index,
+"Value": student.values
+})
+
+st.dataframe(
+details,
+use_container_width=True,
+hide_index=True
+)
+
+# ---------------------------------------------------
+
+# FEATURE ANALYSIS
+
+# ---------------------------------------------------
+
+st.divider()
+
+st.subheader("📊 Student Mental Health Factors")
+
+numeric_features = student.drop(
+labels=[student_column]
+)
+
+numeric_features = pd.to_numeric(
+numeric_features,
+errors="coerce"
+).dropna()
+
+st.bar_chart(numeric_features)
