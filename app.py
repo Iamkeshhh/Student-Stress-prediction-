@@ -103,7 +103,10 @@ page = "Student Analysis"
 # STUDENT ANALYSIS
 # ---------------------------------------------------
 
-elif page == "Student Analysis":
+page = "Student Analysis"
+
+# Student Analysis Code Starts Here
+st.subheader("🎓 Select Student")
 
     autoplay_background_video("Background.mp4")
 
