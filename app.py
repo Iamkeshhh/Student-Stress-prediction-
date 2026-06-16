@@ -1,29 +1,12 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import numpy as np
 
 st.set_page_config(
-    page_title="AI Student Mental Health Analytics",
+    page_title="AI Student Mental Health Platform",
     page_icon="🧠",
     layout="wide"
 )
-
-# ---------------- CSS ---------------- #
-
-st.markdown("""
-<style>
-[data-testid="stAppViewContainer"]{
-    background:#0E1117;
-}
-
-h1,h2,h3,p,div{
-    color:white;
-}
-</style>
-""", unsafe_allow_html=True)
-
-# ---------------- LOAD DATA ---------------- #
 
 @st.cache_data
 def load_data():
@@ -31,220 +14,229 @@ def load_data():
 
 df = load_data()
 
-# ---------------- TITLE ---------------- #
+# ---------- SIDEBAR ----------
 
-st.title("🧠 AI Student Mental Health Analytics Platform")
+st.sidebar.title("🧠 Mental Health Platform")
 
-st.write(
-    "Early detection of student stress using Machine Learning and XGBoost."
-)
-
-# ---------------- KPI SECTION ---------------- #
-
-total_students = len(df)
-
-high_stress = len(df[df["stress_level"] == 2])
-
-medium_stress = len(df[df["stress_level"] == 1])
-
-low_stress = len(df[df["stress_level"] == 0])
-
-avg_anxiety = round(df["anxiety_level"].mean(),2)
-
-c1,c2,c3,c4,c5 = st.columns(5)
-
-c1.metric("Students", total_students)
-c2.metric("High Stress", high_stress)
-c3.metric("Medium Stress", medium_stress)
-c4.metric("Low Stress", low_stress)
-c5.metric("Avg Anxiety", avg_anxiety)
-
-st.divider()
-
-# ---------------- STRESS DISTRIBUTION ---------------- #
-
-col1,col2 = st.columns(2)
-
-with col1:
-
-    st.subheader("Stress Distribution")
-
-    fig,ax = plt.subplots(figsize=(6,4))
-
-    sns.countplot(
-        x="stress_level",
-        data=df,
-        ax=ax
-    )
-
-    st.pyplot(fig)
-
-with col2:
-
-    st.subheader("Stress Level Percentage")
-
-    counts = df["stress_level"].value_counts()
-
-    fig2,ax2 = plt.subplots(figsize=(5,5))
-
-    ax2.pie(
-        counts,
-        labels=counts.index,
-        autopct="%1.1f%%"
-    )
-
-    st.pyplot(fig2)
-
-# ---------------- TOP STRESS FACTORS ---------------- #
-
-st.subheader("Top Stress Contributors")
-
-stress_factors = [
-    "anxiety_level",
-    "depression",
-    "peer_pressure",
-    "bullying",
-    "sleep_quality",
-    "academic_performance"
-]
-
-means = [df[col].mean() for col in stress_factors]
-
-factor_df = pd.DataFrame({
-    "Factor":stress_factors,
-    "Value":means
-})
-
-fig3,ax3 = plt.subplots(figsize=(8,4))
-
-sns.barplot(
-    x="Factor",
-    y="Value",
-    data=factor_df,
-    ax=ax3
-)
-
-plt.xticks(rotation=30)
-
-st.pyplot(fig3)
-
-# ---------------- WELLNESS INDEX ---------------- #
-
-st.subheader("Mental Wellness Index")
-
-wellness = round(
-    100 -
-    (
-        (
-            df["anxiety_level"].mean()
-            + df["depression"].mean()
-            + df["peer_pressure"].mean()
-        ) / 3
-    ) * 10,
-    2
-)
-
-st.metric(
-    "Overall Wellness Score",
-    f"{wellness}%"
-)
-
-progress = int(wellness)
-
-st.progress(progress)
-
-# ---------------- EARLY WARNING SYSTEM ---------------- #
-
-st.subheader("Faculty Early Warning System")
-
-critical = df[
-    (df["anxiety_level"] > 8) &
-    (df["depression"] > 8)
-]
-
-st.error(
-    f"⚠ {len(critical)} Students Require Immediate Attention"
-)
-
-st.dataframe(
-    critical.head(20),
-    use_container_width=True
-)
-
-# ---------------- MODEL COMPARISON ---------------- #
-
-st.subheader("Model Performance Comparison")
-
-model_df = pd.DataFrame({
-    "Model":[
-        "Logistic Regression",
-        "Random Forest",
-        "SVM",
-        "XGBoost",
-        "Deep Learning"
-    ],
-    "Accuracy":[
-        0.86,
-        0.90,
-        0.91,
-        0.95,
-        0.96
+page = st.sidebar.radio(
+    "Navigate",
+    [
+        "Home",
+        "Student Assessment",
+        "Faculty Dashboard",
+        "Student Explorer",
+        "Recommendations"
     ]
-})
-
-fig4,ax4 = plt.subplots(figsize=(8,4))
-
-sns.barplot(
-    x="Model",
-    y="Accuracy",
-    data=model_df,
-    ax=ax4
 )
 
-plt.xticks(rotation=20)
+# ---------- HOME ----------
 
-st.pyplot(fig4)
+if page == "Home":
 
-# ---------------- CORRELATION HEATMAP ---------------- #
+    st.title("AI-Powered Student Mental Health Analytics")
 
-st.subheader("Feature Correlation Heatmap")
+    c1,c2,c3,c4 = st.columns(4)
 
-corr = df.corr(numeric_only=True)
+    c1.metric("Students", len(df))
+    c2.metric("Features", len(df.columns)-1)
+    c3.metric(
+        "High Stress",
+        len(df[df["stress_level"] == 2])
+    )
+    c4.metric(
+        "Low Stress",
+        len(df[df["stress_level"] == 0])
+    )
 
-fig5,ax5 = plt.subplots(figsize=(12,8))
+    st.info(
+        "Use the sidebar to switch between modules."
+    )
 
-sns.heatmap(
-    corr,
-    cmap="coolwarm",
-    ax=ax5
-)
+# ---------- STUDENT ASSESSMENT ----------
 
-st.pyplot(fig5)
+elif page == "Student Assessment":
 
-# ---------------- FOOTER ---------------- #
+    st.title("🎓 Student Assessment")
 
-st.markdown("---")
+    tab1, tab2 = st.tabs(
+        ["Personal Details", "Mental Health Inputs"]
+    )
 
-st.markdown("""
-### Project Features
+    with tab1:
 
-✅ Stress Prediction
+        student_name = st.text_input(
+            "Student Name"
+        )
 
-✅ Faculty Dashboard
+        age = st.number_input(
+            "Age",
+            16,
+            40,
+            20
+        )
 
-✅ Explainable AI
+        department = st.selectbox(
+            "Department",
+            [
+                "CSE",
+                "ECE",
+                "EEE",
+                "MECH",
+                "MBA"
+            ]
+        )
 
-✅ Recommendation Engine
+    with tab2:
 
-✅ Student Risk Ranking
+        anxiety = st.slider(
+            "Anxiety Level",
+            0,
+            10,
+            5
+        )
 
-✅ Wellness Score
+        depression = st.slider(
+            "Depression",
+            0,
+            10,
+            5
+        )
 
-✅ Early Warning System
+        peer_pressure = st.slider(
+            "Peer Pressure",
+            0,
+            10,
+            5
+        )
 
-✅ PDF Report Generation
+        sleep_quality = st.slider(
+            "Sleep Quality",
+            0,
+            10,
+            5
+        )
 
-✅ XGBoost + Deep Learning Comparison
+        bullying = st.slider(
+            "Bullying",
+            0,
+            10,
+            5
+        )
+
+    if st.button("Evaluate Student"):
+
+        score = (
+            anxiety +
+            depression +
+            peer_pressure +
+            bullying
+        ) - sleep_quality
+
+        if score < 10:
+            level = "Low Stress"
+        elif score < 20:
+            level = "Medium Stress"
+        else:
+            level = "High Stress"
+
+        st.success(
+            f"Predicted Stress Level: {level}"
+        )
+
+# ---------- FACULTY DASHBOARD ----------
+
+elif page == "Faculty Dashboard":
+
+    st.title("🏫 Faculty Dashboard")
+
+    stress_filter = st.selectbox(
+        "Stress Level",
+        sorted(df["stress_level"].unique())
+    )
+
+    filtered = df[
+        df["stress_level"] == stress_filter
+    ]
+
+    st.write(
+        f"Students in selected category: {len(filtered)}"
+    )
+
+    st.dataframe(
+        filtered,
+        use_container_width=True
+    )
+
+# ---------- STUDENT EXPLORER ----------
+
+elif page == "Student Explorer":
+
+    st.title("🔍 Student Explorer")
+
+    student_index = st.selectbox(
+        "Select Student",
+        df.index
+    )
+
+    student = df.loc[student_index]
+
+    st.subheader("Student Details")
+
+    st.write(student)
+
+    feature = st.selectbox(
+        "Feature",
+        df.columns
+    )
+
+    st.metric(
+        feature,
+        student[feature]
+    )
+
+# ---------- RECOMMENDATIONS ----------
+
+elif page == "Recommendations":
+
+    st.title("💡 Recommendations")
+
+    stress_choice = st.selectbox(
+        "Stress Category",
+        [
+            "Low",
+            "Medium",
+            "High"
+        ]
+    )
+
+    if stress_choice == "Low":
+
+        st.success("""
+Maintain current lifestyle
+
+Continue exercise
+
+Maintain social interactions
 """)
 
+    elif stress_choice == "Medium":
 
+        st.warning("""
+Improve sleep quality
+
+Reduce study overload
+
+Practice mindfulness
+""")
+
+    else:
+
+        st.error("""
+Seek counselling support
+
+Reduce academic burden
+
+Increase social support
+
+Monitor mental health regularly
+""")
