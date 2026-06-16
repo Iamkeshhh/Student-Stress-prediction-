@@ -112,13 +112,13 @@ autoplay_background_video("Background.mp4")
 
 st.title("🎯 Student Mental Health Analyzer")
 
-    # Student Name Column
-    student_column = "Student_Name"
+# Student Name Column
+student_column = "Student_Name"
 
-    # Student Dropdown
-    selected_student = st.selectbox(
-        "Select Student",
-        sorted(df[student_column].dropna().unique())
+# Student Dropdown
+selected_student = st.selectbox(
+    "Select Student",
+     sorted(df[student_column].dropna().unique())
     )
 
     # Student Record
