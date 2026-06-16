@@ -1,6 +1,13 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer
+)
+
+from reportlab.lib.styles import getSampleStyleSheet
 
 # ---------------------------------------------------
 # PAGE CONFIG
@@ -178,43 +185,6 @@ elif page == "Student Analysis":
 
     else:
         st.error("HIGH RISK STUDENT")
-
-    left, right = st.columns([1,1])
-
-with right:
-
-    if risk == "LOW":
-
-        st.success("🟢 LOW RISK STUDENT")
-
-        st.image(
-            "assets/low_risk.gif",
-            use_container_width=True
-        )
-
-        autoplay_video("low stress.mp4")
-
-    elif risk == "MEDIUM":
-
-        st.warning("🟡 MEDIUM RISK STUDENT")
-
-        st.image(
-            "assets/medium_risk.gif",
-            use_container_width=True
-        )
-
-        autoplay_video("medium stress.mp4")
-
-    else:
-
-        st.error("🔴 HIGH RISK STUDENT")
-
-        st.image(
-            "assets/high_risk.gif",
-            use_container_width=True
-        )
-
-        autoplay_video("high stress.mp4")
 
 
     # ---------------------------------------------------
@@ -396,5 +366,125 @@ if risk in ["MEDIUM", "HIGH"]:
     )
 
     st.divider()
+
+if risk == "LOW":
+
+    consultation_note = """
+    Maintain healthy lifestyle and regular monitoring.
+    """
+
+elif risk == "MEDIUM":
+
+    consultation_note = """
+    Counseling session recommended within 2 weeks.
+    """
+
+else:
+
+    consultation_note = """
+    Immediate counseling and faculty intervention required.
+    """
+
+def generate_report(
+    student,
+    risk,
+    risk_score,
+    consultation_note
+):
+
+    pdf_file = "student_report.pdf"
+
+    doc = SimpleDocTemplate(pdf_file)
+
+    styles = getSampleStyleSheet()
+
+    content = []
+
+    content.append(
+        Paragraph(
+            "Student Mental Health Report",
+            styles["Title"]
+        )
+    )
+
+    content.append(Spacer(1,12))
+
+    content.append(
+        Paragraph(
+            f"Student Name: {student['Student_Name']}",
+            styles["Normal"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            f"Risk Score: {risk_score}",
+            styles["Normal"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            f"Risk Category: {risk}",
+            styles["Normal"]
+        )
+    )
+
+    content.append(Spacer(1,12))
+
+    content.append(
+        Paragraph(
+            "Student Details",
+            styles["Heading2"]
+        )
+    )
+
+    for col in student.index:
+
+        content.append(
+            Paragraph(
+                f"{col}: {student[col]}",
+                styles["Normal"]
+            )
+        )
+
+    content.append(Spacer(1,12))
+
+    content.append(
+        Paragraph(
+            "Consultation Recommendation",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            consultation_note,
+            styles["Normal"]
+        )
+    )
+
+    doc.build(content)
+
+    return pdf_file
+
+st.markdown("---")
+st.subheader("📄 Download Student Report")
+
+report_file = generate_report(
+    student,
+    risk,
+    risk_score,
+    consultation_note
+)
+
+with open(report_file, "rb") as pdf:
+
+    st.download_button(
+        label="📥 Download Mental Health Report",
+        data=pdf,
+        file_name=f"{selected_student}_report.pdf",
+        mime="application/pdf"
+    )
 
     
