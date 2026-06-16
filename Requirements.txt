@@ -5,6 +5,7 @@ scikit-learn
 xgboost
 tensorflow
 plotly
+plotly==6.1.2
 matplotlib
 seaborn
 shap
