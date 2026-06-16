@@ -34,10 +34,50 @@ df = load_data()
 # SIDEBAR
 # ---------------------------------------------------
 
+st.sidebar.title("🧠 Mental Health Analytics")
 
-    st.sidebar.title("🧠 Mental Health Analytics")
+page = st.sidebar.radio(
+    "Navigation",
+    [
+        "Home",
+        "Student Analysis"
+    ]
+)
 
-    page = "Student Analysis"
+# ---------------------------------------------------
+# HOME
+# ---------------------------------------------------
+
+if page == "Home":
+
+    st.title("🎓 AI Powered Student Mental Health Platform")
+
+    c1, c2, c3, c4 = st.columns(4)
+
+    c1.metric("Students", len(df))
+    c2.metric("Features", len(df.columns))
+
+    c3.metric(
+        "High Stress",
+        len(df[df["stress_level"] == 2])
+    )
+
+    c4.metric(
+        "Low Stress",
+        len(df[df["stress_level"] == 0])
+    )
+
+    st.info(
+        "Use the Student Analysis page to view complete student profiles and recommendations."
+    )
+
+# ---------------------------------------------------
+# STUDENT ANALYSIS
+# ---------------------------------------------------
+
+elif page == "Student Analysis":
+
+    st.title("🎯 Student Mental Health Analyzer")
 
     # Student Name Column
     student_column = "Student_Name"
