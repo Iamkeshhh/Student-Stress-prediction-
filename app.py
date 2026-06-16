@@ -180,57 +180,114 @@ elif page == "Student Analysis":
         st.error("HIGH RISK STUDENT")
 
 
-    # ---------------------------------------------------
-    # RECOMMENDATIONS
-    # ---------------------------------------------------
+    st.subheader("💡 Personalized Wellness Action Plan")
 
-    st.subheader("💡 Personalized Recommendations")
+if risk == "LOW":
 
-    if risk == "LOW":
+    st.success("Healthy Mental State Detected")
 
-        st.success("""
-        ✅ Maintain current healthy habits
+    st.markdown("""
+### Recommended Actions
 
-        ✅ Continue regular exercise
+✅ Maintain a consistent sleep schedule
 
-        ✅ Participate in extracurricular activities
+✅ Exercise at least 30 minutes daily
 
-        ✅ Maintain good sleep schedule
+✅ Continue participating in social activities
 
-        ✅ Stay socially connected
-        """)
+✅ Practice gratitude journaling
 
-    elif risk == "MEDIUM":
+### Helpful Resources
 
-        st.warning("""
-        ⚠ Improve sleep quality
+🔗 Mindfulness Guide:
+https://www.mindful.org/meditation/mindfulness-getting-started/
 
-        ⚠ Reduce study overload
+🔗 Breathing Exercises:
+https://www.healthline.com/health/breathing-exercise
 
-        ⚠ Practice mindfulness
+🔗 Stress Management Tips:
+https://www.helpguide.org/articles/stress/stress-management.htm
+""")
 
-        ⚠ Seek peer support
+elif risk == "MEDIUM":
 
-        ⚠ Monitor stress regularly
-        """)
+    st.warning("Moderate Stress Detected")
 
-    else:
+    st.markdown("""
+### Recommended Actions
 
-        st.error("""
-        🚨 Immediate counseling recommended
+✅ Follow a structured daily routine
 
-        🚨 Faculty intervention advised
+✅ Reduce academic overload
 
-        🚨 Reduce academic pressure
+✅ Use Pomodoro study techniques
 
-        🚨 Increase social support
+✅ Practice mindfulness for 10–15 minutes daily
 
-        🚨 Regular mental health monitoring
+✅ Reach out to trusted friends or mentors
 
-        🚨 Professional psychologist consultation
-        """)
+### Professional Support
 
-    st.divider()
+🔗 BetterHelp:
+https://www.betterhelp.com/
+
+🔗 Mindfulness Meditation:
+https://www.headspace.com/meditation
+
+🔗 Anxiety Management Resources:
+https://www.nimh.nih.gov/health/topics/anxiety-disorders
+
+### Suggested Daily Goal
+
+🧘 15 Minutes Meditation
+
+🚶 20 Minutes Walking
+
+😴 7–8 Hours Sleep
+""")
+
+else:
+
+    st.error("High Stress Level Detected")
+
+    st.markdown("""
+# 🚨 Immediate Support Recommended
+
+### Action Plan
+
+1. Schedule a counseling session immediately.
+
+2. Inform a faculty mentor or trusted guardian.
+
+3. Reduce non-essential academic workload.
+
+4. Increase social interactions with trusted friends.
+
+5. Avoid isolation.
+
+### Professional Consultation
+
+🔗 BetterHelp Online Counseling
+https://www.betterhelp.com/
+
+🔗 7 Cups Emotional Support
+https://www.7cups.com/
+
+🔗 NIMH Mental Health Resources
+https://www.nimh.nih.gov/
+
+### Guided Relaxation
+
+🔗 Headspace
+https://www.headspace.com/
+
+🔗 Calm
+https://www.calm.com/
+
+### Emergency Help
+
+If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
+""")
 
     # ---------------------------------------------------
     # COMPLETE STUDENT DETAILS
