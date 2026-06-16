@@ -1,74 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-import base64
-
-def autoplay_background_video(video_path):
-
-    with open(video_path, "rb") as video_file:
-        video_bytes = video_file.read()
-
-    encoded = base64.b64encode(video_bytes).decode()
-
-    st.markdown(
-        f"""
-        <style>
-
-        .video-banner {{
-            position: relative;
-            width: 100%;
-            height: 500px;
-            overflow: hidden;
-            border-radius: 20px;
-            margin-bottom: 25px;
-        }}
-
-        .video-banner video {{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }}
-
-        .banner-text {{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            text-align: center;
-            background: rgba(0,0,0,0.45);
-            padding: 20px 40px;
-            border-radius: 15px;
-        }}
-
-        .banner-text h1 {{
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-        }}
-
-        .banner-text p {{
-            font-size: 1.2rem;
-        }}
-
-        </style>
-
-        <div class="video-banner">
-
-            <video autoplay muted loop playsinline>
-                <source src="data:video/mp4;base64,{encoded}" type="video/mp4">
-            </video>
-
-            <div class="banner-text">
-                <h1>🧠 AI Student Mental Health Analytics</h1>
-                <p>
-                Early Detection • Risk Assessment • Personalized Recommendations
-                </p>
-            </div>
-
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
 
 # ---------------------------------------------------
 # PAGE CONFIG
@@ -98,219 +30,238 @@ def load_data():
 
 df = load_data()
 
-autoplay_background_video("Background.mp4")
-
+# ---------------------------------------------------
+# SIDEBAR
 # ---------------------------------------------------
 
+st.sidebar.title("🧠 Mental Health Analytics")
+
+page = st.sidebar.radio(
+    "Navigation",
+    [
+        "Home",
+        "Student Analysis"
+    ]
+)
+
+# ---------------------------------------------------
+# HOME
+# ---------------------------------------------------
+
+if page == "Home":
+
+    st.title("🎓 AI Powered Student Mental Health Platform")
+
+    c1, c2, c3, c4 = st.columns(4)
+
+    c1.metric("Students", len(df))
+    c2.metric("Features", len(df.columns))
+
+    c3.metric(
+        "High Stress",
+        len(df[df["stress_level"] == 2])
+    )
+
+    c4.metric(
+        "Low Stress",
+        len(df[df["stress_level"] == 0])
+    )
+
+    st.info(
+        "Use the Student Analysis page to view complete student profiles and recommendations."
+    )
+
+# ---------------------------------------------------
 # STUDENT ANALYSIS
-
 # ---------------------------------------------------
 
-student_column = "Student_Name"
+elif page == "Student Analysis":
+
+    st.title("🎯 Student Mental Health Analyzer")
+
+    # Student Name Column
+    student_column = "Student_Name"
 
-selected_student = st.selectbox(
-"Select Student",
-sorted(df[student_column].dropna().unique())
-)
+    # Student Dropdown
+    selected_student = st.selectbox(
+        "Select Student",
+        sorted(df[student_column].dropna().unique())
+    )
 
-student = df[df[student_column] == selected_student].iloc[0]
+    # Student Record
+    student = df[df[student_column] == selected_student].iloc[0]
 
-# ---------------------------------------------------
+    # ---------------------------------------------------
+    # PROFILE HEADER
+    # ---------------------------------------------------
 
-# PROFILE HEADER
+    st.markdown("## 👤 Student Profile")
 
-# ---------------------------------------------------
+    col1, col2, col3 = st.columns(3)
 
-st.markdown("## 👤 Student Profile")
+    col1.metric(
+        "Student Name",
+        student["Student_Name"]
+    )
 
-col1, col2, col3 = st.columns(3)
+    col2.metric(
+        "Dataset Stress Level",
+        int(student["stress_level"])
+    )
 
-col1.metric(
-"Student Name",
-student["Student_Name"]
-)
+    risk_score = (
+        student["anxiety_level"]
+        + student["depression"]
+        + student["peer_pressure"]
+        + student["bullying"]
+        + student["future_career_concerns"]
+        - student["sleep_quality"]
+    )
 
-col2.metric(
-"Dataset Stress Level",
-int(student["stress_level"])
-)
+    col3.metric(
+        "Risk Score",
+        round(risk_score, 1)
+    )
 
-risk_score = (
-student["anxiety_level"]
-+ student["depression"]
-+ student["peer_pressure"]
-+ student["bullying"]
-+ student["future_career_concerns"]
-- student["sleep_quality"]
-)
+    st.divider()
 
-col3.metric(
-"Risk Score",
-round(risk_score, 1)
-)
+    # ---------------------------------------------------
+    # GAUGE CHART
+    # ---------------------------------------------------
 
-st.divider()
+    st.subheader("🧠 Stress Risk Gauge")
 
-# ---------------------------------------------------
+    gauge_max = 50
 
-# RISK CATEGORY
+    fig = go.Figure(
+        go.Indicator(
+            mode="gauge+number",
+            value=risk_score,
+            title={"text": "Stress Risk Score"},
+            gauge={
+                "axis": {"range": [0, gauge_max]},
+                "bar": {"color": "darkred"},
+                "steps": [
+                    {"range": [0, 15], "color": "lightgreen"},
+                    {"range": [15, 30], "color": "yellow"},
+                    {"range": [30, 50], "color": "salmon"}
+                ]
+            }
+        )
+    )
 
-# ---------------------------------------------------
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
 
-if risk_score < 15:
-  risk = "LOW"
-elif risk_score < 30:
-  risk = "MEDIUM"
-else:
-  risk = "HIGH"
+    # ---------------------------------------------------
+    # RISK CATEGORY
+    # ---------------------------------------------------
 
-# ---------------------------------------------------
+    if risk_score < 15:
+        risk = "LOW"
 
-# GAUGE CHART
+    elif risk_score < 30:
+        risk = "MEDIUM"
 
-# ---------------------------------------------------
+    else:
+        risk = "HIGH"
 
-st.subheader("🧠 Stress Risk Gauge")
+    st.subheader("🚨 Risk Assessment")
 
-gauge_max = 50
+    if risk == "LOW":
+        st.success("LOW RISK STUDENT")
 
-fig = go.Figure(
-go.Indicator(
-mode="gauge+number",
-value=risk_score,
-title={"text": "Stress Risk Score"},
-gauge={
-"axis": {"range": [0, gauge_max]},
-"bar": {"color": "darkred"},
-"steps": [
-{"range": [0, 15], "color": "lightgreen"},
-{"range": [15, 30], "color": "yellow"},
-{"range": [30, 50], "color": "salmon"}
-]
-}
-)
-)
+    elif risk == "MEDIUM":
+        st.warning("MEDIUM RISK STUDENT")
 
-st.plotly_chart(
-fig,
-use_container_width=True
-)
+    else:
+        st.error("HIGH RISK STUDENT")
 
-# ---------------------------------------------------
 
-# RISK RESULT
+    # ---------------------------------------------------
+    # RECOMMENDATIONS
+    # ---------------------------------------------------
 
-# ---------------------------------------------------
+    st.subheader("💡 Personalized Recommendations")
 
-st.subheader("🚨 Risk Assessment")
+    if risk == "LOW":
 
-if risk == "LOW":
-  st.success("LOW RISK STUDENT")
+        st.success("""
+        ✅ Maintain current healthy habits
 
-elif risk == "MEDIUM":
-  st.warning("MEDIUM RISK STUDENT")
+        ✅ Continue regular exercise
 
-else:
-  st.error("HIGH RISK STUDENT")
+        ✅ Participate in extracurricular activities
 
-# ---------------------------------------------------
+        ✅ Maintain good sleep schedule
 
-# RECOMMENDATIONS
+        ✅ Stay socially connected
+        """)
 
-# ---------------------------------------------------
+    elif risk == "MEDIUM":
 
-st.subheader("💡 Personalized Recommendations")
+        st.warning("""
+        ⚠ Improve sleep quality
 
-if risk == "LOW":
-    
- st.success("""
- 
+        ⚠ Reduce study overload
 
-✅ Maintain current healthy habits
+        ⚠ Practice mindfulness
 
-✅ Continue regular exercise
+        ⚠ Seek peer support
 
-✅ Participate in extracurricular activities
+        ⚠ Monitor stress regularly
+        """)
 
-✅ Maintain good sleep schedule
+    else:
 
-✅ Stay socially connected
-""")
+        st.error("""
+        🚨 Immediate counseling recommended
 
-elif risk == "MEDIUM":
-    
- st.warning("""
+        🚨 Faculty intervention advised
 
+        🚨 Reduce academic pressure
 
-⚠ Improve sleep quality
+        🚨 Increase social support
 
-⚠ Reduce study overload
+        🚨 Regular mental health monitoring
 
-⚠ Practice mindfulness
+        🚨 Professional psychologist consultation
+        """)
 
-⚠ Seek peer support
+    st.divider()
 
-⚠ Monitor stress regularly
-""")
+    # ---------------------------------------------------
+    # COMPLETE STUDENT DETAILS
+    # ---------------------------------------------------
 
-else:
-    
- st.error("""
- 
+    st.subheader("📋 Complete Student Information")
 
-🚨 Immediate counseling recommended
+    details = pd.DataFrame({
+        "Feature": student.index,
+        "Value": student.values
+    })
 
-🚨 Faculty intervention advised
+    st.dataframe(
+        details,
+        use_container_width=True,
+        hide_index=True
+    )
 
-🚨 Reduce academic pressure
+    st.divider()
 
-🚨 Increase social support
+    # ---------------------------------------------------
+    # FEATURE ANALYSIS
+    # ---------------------------------------------------
 
-🚨 Regular mental health monitoring
+    st.subheader("📊 Student Mental Health Factors")
 
-🚨 Professional psychologist consultation
-""")
+    numeric_features = student.drop(
+        labels=["Student_Name"]
+    )
 
-st.divider()
-
-# ---------------------------------------------------
-
-# COMPLETE STUDENT DETAILS
-
-# ---------------------------------------------------
-
-st.subheader("📋 Complete Student Information")
-
-details = pd.DataFrame({
-"Feature": student.index,
-"Value": student.values
-})
-
-st.dataframe(
-details,
-use_container_width=True,
-hide_index=True
-)
-
-st.divider()
-
-# ---------------------------------------------------
-
-# FEATURE ANALYSIS
-
-# ---------------------------------------------------
-
-st.subheader("📊 Student Mental Health Factors")
-
-numeric_features = student.drop(
-labels=["Student_Name"]
-)
-
-numeric_features = pd.to_numeric(
-numeric_features,
-errors="coerce"
-).dropna()
-
-st.bar_chart(numeric_features)
-
-   
+    numeric_features = pd.to_numeric(
+        numeric_features,
+        errors="coerce"
+    ).dropna()
