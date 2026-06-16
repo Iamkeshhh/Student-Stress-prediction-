@@ -23,7 +23,7 @@ layout="wide"
 
 @st.cache_data
 def load_data():
-df = pd.read_csv("StressLevelDataset.csv")
+ df = pd.read_csv("StressLevelDataset.csv")
 
 ```
 # Remove unnamed columns
