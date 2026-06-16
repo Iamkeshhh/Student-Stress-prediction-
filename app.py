@@ -179,6 +179,43 @@ elif page == "Student Analysis":
     else:
         st.error("HIGH RISK STUDENT")
 
+    left, right = st.columns([1,1])
+
+with right:
+
+    if risk == "LOW":
+
+        st.success("🟢 LOW RISK STUDENT")
+
+        st.image(
+            "assets/low_risk.gif",
+            use_container_width=True
+        )
+
+        autoplay_video("low stress.mp4")
+
+    elif risk == "MEDIUM":
+
+        st.warning("🟡 MEDIUM RISK STUDENT")
+
+        st.image(
+            "assets/medium_risk.gif",
+            use_container_width=True
+        )
+
+        autoplay_video("medium stress.mp4")
+
+    else:
+
+        st.error("🔴 HIGH RISK STUDENT")
+
+        st.image(
+            "assets/high_risk.gif",
+            use_container_width=True
+        )
+
+        autoplay_video("high stress.mp4")
+
 
     # ---------------------------------------------------
     # RECOMMENDATIONS
