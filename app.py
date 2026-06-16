@@ -205,13 +205,13 @@ use_container_width=True
 st.subheader("🚨 Risk Assessment")
 
 if risk == "LOW":
-st.success("LOW RISK STUDENT")
+  st.success("LOW RISK STUDENT")
 
 elif risk == "MEDIUM":
-st.warning("MEDIUM RISK STUDENT")
+  st.warning("MEDIUM RISK STUDENT")
 
 else:
-st.error("HIGH RISK STUDENT")
+  st.error("HIGH RISK STUDENT")
 
 # ---------------------------------------------------
 
@@ -224,7 +224,7 @@ st.subheader("💡 Personalized Recommendations")
 if risk == "LOW":
 
 ```
-st.success("""
+  st.success("""
 ```
 
 ✅ Maintain current healthy habits
@@ -241,7 +241,7 @@ st.success("""
 elif risk == "MEDIUM":
 
 ```
-st.warning("""
+  st.warning("""
 ```
 
 ⚠ Improve sleep quality
@@ -258,7 +258,7 @@ st.warning("""
 else:
 
 ```
-st.error("""
+  st.error("""
 ```
 
 🚨 Immediate counseling recommended
