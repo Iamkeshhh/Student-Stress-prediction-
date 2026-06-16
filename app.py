@@ -42,7 +42,7 @@ df = load_data()
 
 # =====================================================
 
- def autoplay_background_video(video_path):
+def autoplay_background_video(video_path):
 
 
 with open(video_path, "rb") as file:
