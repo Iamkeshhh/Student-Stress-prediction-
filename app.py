@@ -293,6 +293,54 @@ https://www.calm.com/
 If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
 """)
 
+    st.subheader("💡 Personalized Recommendations")
+
+if risk == "LOW":
+    ...
+    
+elif risk == "MEDIUM":
+    ...
+
+else:
+    ...
+
+# =====================================================
+# COUNSELING CONSULTATION FORM
+# =====================================================
+
+if risk in ["MEDIUM", "HIGH"]:
+
+    st.markdown("---")
+    st.subheader("📅 Request Counseling Support")
+
+    with st.form("consultation_form"):
+
+        student_email = st.text_input(
+            "Student Email"
+        )
+
+        preferred_date = st.date_input(
+            "Preferred Consultation Date"
+        )
+
+        concern = st.text_area(
+            "Describe Your Concern"
+        )
+
+        submitted = st.form_submit_button(
+            "Submit Counseling Request"
+        )
+
+        if submitted:
+
+            st.success(
+                "✅ Counseling request submitted successfully."
+            )
+
+            st.info(
+                "The student wellness team will contact you soon."
+            )
+
 
     # ---------------------------------------------------
     # COMPLETE STUDENT DETAILS
