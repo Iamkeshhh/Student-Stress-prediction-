@@ -582,14 +582,23 @@ elif page == "Student Analysis":
     )
 
     st.divider()
-    st.subheader("📄 Download Student Report")
-
-report_text = f"""
+    report = f"""
+=====================================
 STUDENT MENTAL HEALTH REPORT
+=====================================
 
-Student Name: {student['Student_Name']}
-Dataset Stress Level: {student['stress_level']}
-Predicted Risk: {risk}
+Student Name:
+{student['Student_Name']}
+
+Model Used:
+{model_choice}
+
+Predicted Risk:
+{risk}
+
+Prediction Confidence:
+{confidence:.2f}%
+
 
 -------------------------------------
 COUNSELING STATUS
@@ -597,11 +606,17 @@ COUNSELING STATUS
 
 {"Counseling Recommended" if risk in ["MEDIUM","HIGH"] else "Regular Monitoring"}
 
+-------------------------------------
+STUDENT DETAILS
+-------------------------------------
 """
 
+for col in student.index:
+    report += f"\n{col}: {student[col]}"
+
 st.download_button(
-    label="⬇ Download Report",
+    label="📄 Download Full Mental Health Report",
     data=report,
-    file_name=f"{student['Student_Name']}_Report.txt",
+    file_name=f"{student['Student_Name']}_Mental_Health_Report.txt",
     mime="text/plain"
 )
