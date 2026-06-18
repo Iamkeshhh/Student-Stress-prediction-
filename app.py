@@ -524,7 +524,7 @@ elif page == "Student Analysis":
         If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
          """)
 
-          pdf_file = create_pdf_report(
+         pdf_file = create_pdf_report(
          student_name=student["Student_Name"],
          model_name=model_choice,
          risk=risk,
@@ -532,7 +532,7 @@ elif page == "Student Analysis":
          recommendations=recommendations
         )
 
-          st.download_button(
+         st.download_button(
          label="📥 Download Assessment Report",
          data=pdf_file,
          file_name=f"{student['Student_Name']}_MentalHealthReport.pdf",
