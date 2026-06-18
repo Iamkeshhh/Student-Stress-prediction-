@@ -183,19 +183,52 @@ elif page == "Student Analysis":
     # ---------------------------------------------------
     # RECOMMENDATIONS
     # ---------------------------------------------------
+     # ---------------------------------------------------
+# RISK CATEGORY
+# ---------------------------------------------------
 
-    st.subheader("💡 Personalized Wellness Action Plan")
+if risk_score < 15:
+    risk = "LOW"
 
-    if risk == "LOW":
+elif risk_score < 30:
+    risk = "MEDIUM"
 
-      st.success("Healthy Mental State Detected")
+else:
+    risk = "HIGH"
 
-      st.markdown("""
-      ### Recommended Actions
+# ---------------------------------------------------
+# RISK RESULT
+# ---------------------------------------------------
 
-     ✅ Maintain a consistent sleep schedule
+st.subheader("🚨 Risk Assessment")
 
-     ✅ Exercise at least 30 minutes daily
+if risk == "LOW":
+    st.success("🟢 LOW RISK STUDENT")
+
+elif risk == "MEDIUM":
+    st.warning("🟡 MEDIUM RISK STUDENT")
+
+else:
+    st.error("🔴 HIGH RISK STUDENT")
+
+# ---------------------------------------------------
+# WELLNESS ACTION PLAN
+# ---------------------------------------------------
+
+st.subheader("💡 Personalized Wellness Action Plan")
+
+if risk == "LOW":
+
+    consultation_note = """
+    Maintain healthy lifestyle and regular monitoring.
+    """
+
+    st.success("""
+### Recommended Actions
+
+✅ Maintain a consistent sleep schedule
+
+✅ Exercise at least 30 minutes daily
 
 ✅ Continue participating in social activities
 
@@ -203,115 +236,76 @@ elif page == "Student Analysis":
 
 ### Helpful Resources
 
-🔗 Mindfulness Guide:
-https://www.mindful.org/meditation/mindfulness-getting-started/
+🔗 https://www.mindful.org
 
-🔗 Breathing Exercises:
-https://www.healthline.com/health/breathing-exercise
+🔗 https://www.healthline.com
 
-🔗 Stress Management Tips:
-https://www.helpguide.org/articles/stress/stress-management.htm
+🔗 https://www.helpguide.org
 """)
 
 elif risk == "MEDIUM":
 
-    st.warning("Moderate Stress Detected")
+    consultation_note = """
+    Counseling session recommended within 2 weeks.
+    """
 
-    st.markdown("""
+    st.warning("""
 ### Recommended Actions
 
-✅ Follow a structured daily routine
+✅ Follow a structured routine
 
-✅ Reduce academic overload
+✅ Improve sleep quality
 
-✅ Use Pomodoro study techniques
+✅ Reduce study overload
 
-✅ Practice mindfulness for 10–15 minutes daily
-
-✅ Reach out to trusted friends or mentors
+✅ Practice mindfulness
 
 ### Professional Support
 
-🔗 BetterHelp:
-https://www.betterhelp.com/
+🔗 https://www.betterhelp.com
 
-🔗 Mindfulness Meditation:
-https://www.headspace.com/meditation
+🔗 https://www.headspace.com
 
-🔗 Anxiety Management Resources:
-https://www.nimh.nih.gov/health/topics/anxiety-disorders
-
-### Suggested Daily Goal
-
-🧘 15 Minutes Meditation
-
-🚶 20 Minutes Walking
-
-😴 7–8 Hours Sleep
+🔗 https://www.nimh.nih.gov
 """)
 
 else:
 
-    st.error("High Stress Level Detected")
+    consultation_note = """
+    Immediate counseling and faculty intervention required.
+    """
 
-    st.markdown("""
+    st.error("""
 # 🚨 Immediate Support Recommended
 
-### Action Plan
+1. Schedule counseling immediately
 
-1. Schedule a counseling session immediately.
+2. Inform faculty mentor
 
-2. Inform a faculty mentor or trusted guardian.
+3. Reduce academic burden
 
-3. Reduce non-essential academic workload.
+4. Increase social support
 
-4. Increase social interactions with trusted friends.
+### Consultation Resources
 
-5. Avoid isolation.
+🔗 https://www.betterhelp.com
 
-### Professional Consultation
+🔗 https://www.7cups.com
 
-🔗 BetterHelp Online Counseling
-https://www.betterhelp.com/
+🔗 https://www.headspace.com
 
-🔗 7 Cups Emotional Support
-https://www.7cups.com/
-
-🔗 NIMH Mental Health Resources
-https://www.nimh.nih.gov/
-
-### Guided Relaxation
-
-🔗 Headspace
-https://www.headspace.com/
-
-🔗 Calm
-https://www.calm.com/
-
-### Emergency Help
-
-If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
+🔗 https://www.calm.com
 """)
 
-    st.subheader("💡 Personalized Recommendations")
-
-if risk == "LOW":
-    ...
-    
-elif risk == "MEDIUM":
-    ...
-
-else:
-    ...
-
-# =====================================================
-# COUNSELING CONSULTATION FORM
-# =====================================================
+# ---------------------------------------------------
+# CONSULTATION FORM
+# ---------------------------------------------------
 
 if risk in ["MEDIUM", "HIGH"]:
 
     st.markdown("---")
-    st.subheader("📅 Request Counseling Support")
+
+    st.subheader("📅 Counseling Request Form")
 
     with st.form("consultation_form"):
 
@@ -338,9 +332,9 @@ if risk in ["MEDIUM", "HIGH"]:
             )
 
             st.info(
-                "The student wellness team will contact you soon."
+                "Wellness team will contact you shortly."
             )
-
+    
     # ---------------------------------------------------
     # COMPLETE STUDENT DETAILS
     # ---------------------------------------------------
