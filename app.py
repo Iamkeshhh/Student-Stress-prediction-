@@ -374,7 +374,7 @@ elif page == "Student Analysis":
         😴 7–8 Hours Sleep
          """)
 
-    else:
+      else:
 
         st.error("High Stress Level Detected")
 
