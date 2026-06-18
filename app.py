@@ -524,14 +524,6 @@ elif page == "Student Analysis":
         If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
          """)
 
-         pdf_file = create_pdf_report(
-    student_name=student["Student_Name"],
-    model_name=model_choice,
-    risk=risk,
-    confidence=confidence,
-    recommendations=recommendations
-)
-
 # =====================================================
 # COUNSELING CONSULTATION FORM
 # =====================================================
