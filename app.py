@@ -263,20 +263,20 @@ elif page == "Student Analysis":
 
     if hasattr(selected_model, "predict_proba"):
 
-    probabilities = selected_model.predict_proba(features)[0]
+      probabilities = selected_model.predict_proba(features)[0]
 
-    confidence = max(probabilities) * 100
+      confidence = max(probabilities) * 100
 
-    st.metric(
+      st.metric(
         "Prediction Confidence",
         f"{confidence:.2f}%"
-    )  
+      )  
 
-    risk_score = {
-    "LOW": 10,
-    "MEDIUM": 25,
-    "HIGH": 45
-    }[risk]
+      risk_score = {
+      "LOW": 10,
+      "MEDIUM": 25,
+      "HIGH": 45
+      }[risk]
 
     # ---------------------------------------------------
     # GAUGE CHART
