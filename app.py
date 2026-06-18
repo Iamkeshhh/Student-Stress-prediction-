@@ -587,3 +587,25 @@ elif page == "Student Analysis":
     )
 
     st.divider()
+
+    # ==========================================
+# DOWNLOAD REPORT
+# ==========================================
+
+st.subheader("📄 Download Assessment Report")
+
+pdf_file = create_pdf_report(
+    student_name=student["Student_Name"],
+    risk=risk,
+    model_name=model_choice,
+    recommendation=recommendation_text
+)
+
+with open(pdf_file, "rb") as file:
+
+    st.download_button(
+        label="⬇ Download Mental Health Report",
+        data=file,
+        file_name=pdf_file,
+        mime="application/pdf"
+    )
