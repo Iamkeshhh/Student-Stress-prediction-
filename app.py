@@ -66,7 +66,7 @@ dataset_choice = st.selectbox(
     "📂 Select Dataset",
     [
         "StressLevelDataset.csv",
-        "Student Stress Factors.xlsx"
+        "Student Stress Factors(2).xlsx"
     ]
 )
 
