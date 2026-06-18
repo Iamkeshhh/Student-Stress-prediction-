@@ -56,14 +56,14 @@ if page == "Home":
 
   st.markdown(
     "### Dataset & Model Configuration"
-)
-    dataset_choice = st.selectbox(
+ )
+ dataset_choice = st.selectbox(
     "📂 Select Dataset",
     [
         "StressLevelDataset.csv",
         "StudentStressDataset2.csv"
     ]
-)
+ )
 
 
 # =====================================
