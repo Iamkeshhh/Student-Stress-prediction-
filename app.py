@@ -51,19 +51,27 @@ page = st.sidebar.radio(
 
 if page == "Home":
 
-  
-  st.title("🧠 AI Student Mental Health Platform")
+    st.title("🧠 AI Student Mental Health Platform")
 
-  st.markdown(
-    "### Dataset & Model Configuration"
- )
+    st.markdown(
+        "### Dataset & Model Configuration"
+    )
+
+    # =====================================
+    # DATASET SELECTION
+    # =====================================
+
     dataset_choice = st.selectbox(
-    "📂 Select Dataset",
-    [
-        "StressLevelDataset.csv",
-        "StudentStressDataset2.csv"
-    ]
- )
+        "📂 Select Dataset",
+        [
+            "StressLevelDataset.csv",
+            "Student Stress Factors.xlsx"
+        ]
+    )
+
+    st.success(
+        f"Selected Dataset: {dataset_choice}"
+    )
 
 
 # =====================================
