@@ -584,17 +584,16 @@ elif page == "Student Analysis":
     st.divider()
     st.subheader("📄 Download Student Report")
 
-report = f"""
+report_text = f"""
 STUDENT MENTAL HEALTH REPORT
 
 Student Name: {student['Student_Name']}
-
+Dataset Stress Level: {student['stress_level']}
 Predicted Risk: {risk}
 
-Prediction Confidence: {confidence:.2f}%
+CONSULTATION
 
-Counseling Status:
-{'Required' if risk in ['MEDIUM','HIGH'] else 'Not Required'}
+{consultation_note}
 """
 
 st.download_button(
