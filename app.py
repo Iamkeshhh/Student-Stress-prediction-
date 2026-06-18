@@ -425,8 +425,8 @@ elif page == "Student Analysis":
 
     if risk in ["MEDIUM", "HIGH"]:
 
-    st.markdown("---")
-    st.subheader("📅 Request Counseling Support")
+        st.markdown("---")
+        st.subheader("📅 Request Counseling Support")
 
     with st.form("consultation_form"):
 
