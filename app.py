@@ -591,9 +591,12 @@ Student Name: {student['Student_Name']}
 Dataset Stress Level: {student['stress_level']}
 Predicted Risk: {risk}
 
-CONSULTATION
+-------------------------------------
+COUNSELING STATUS
+-------------------------------------
 
-{consultation_note}
+{"Counseling Recommended" if risk in ["MEDIUM","HIGH"] else "Regular Monitoring"}
+
 """
 
 st.download_button(
