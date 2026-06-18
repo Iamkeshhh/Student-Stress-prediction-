@@ -88,7 +88,7 @@ dataset_choice = st.selectbox(
 
 st.session_state["dataset"] = dataset_choice
 
-   df = load_data(st.session_state["dataset"])
+df = load_data(st.session_state["dataset"])
 
 # =====================================
 # MODEL SELECTION
