@@ -301,13 +301,13 @@ elif page == "Student Analysis":
 # CONSULTATION FORM
 # ---------------------------------------------------
 
-if risk in ["MEDIUM", "HIGH"]:
+     if risk in ["MEDIUM", "HIGH"]:
 
-    st.markdown("---")
+       st.markdown("---")
 
-    st.subheader("📅 Counseling Request Form")
+       st.subheader("📅 Counseling Request Form")
 
-    with st.form("consultation_form"):
+     with st.form("consultation_form"):
 
         student_email = st.text_input(
             "Student Email"
