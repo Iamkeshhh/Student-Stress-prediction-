@@ -51,9 +51,9 @@ page = st.sidebar.radio(
 if page == "Home":
 
 ```
-st.title("🧠 AI Student Mental Health Platform")
+ st.title("🧠 AI Student Mental Health Platform")
 
-st.markdown(
+ st.markdown(
     "### Dataset & Model Configuration"
 )
 
