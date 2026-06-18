@@ -183,97 +183,97 @@ elif page == "Student Analysis":
     # ---------------------------------------------------
     # RECOMMENDATIONS
     # ---------------------------------------------------
-     # ---------------------------------------------------
-# RISK CATEGORY
-# ---------------------------------------------------
+    # ---------------------------------------------------
+    # RISK CATEGORY
+    # ---------------------------------------------------
 
-if risk_score < 15:
-    risk = "LOW"
+    if risk_score < 15:
+       risk = "LOW"
 
-elif risk_score < 30:
-    risk = "MEDIUM"
+    elif risk_score < 30:
+       risk = "MEDIUM"
 
-else:
-    risk = "HIGH"
+    else:
+       risk = "HIGH"
 
-# ---------------------------------------------------
-# RISK RESULT
-# ---------------------------------------------------
+    # ---------------------------------------------------
+    # RISK RESULT
+    # ---------------------------------------------------
 
-st.subheader("🚨 Risk Assessment")
+    st.subheader("🚨 Risk Assessment")
 
-if risk == "LOW":
-    st.success("🟢 LOW RISK STUDENT")
+    if risk == "LOW":
+       st.success("🟢 LOW RISK STUDENT")
 
-elif risk == "MEDIUM":
-    st.warning("🟡 MEDIUM RISK STUDENT")
+    elif risk == "MEDIUM":
+       st.warning("🟡 MEDIUM RISK STUDENT")
 
-else:
-    st.error("🔴 HIGH RISK STUDENT")
+    else:
+       st.error("🔴 HIGH RISK STUDENT")
 
-# ---------------------------------------------------
-# WELLNESS ACTION PLAN
-# ---------------------------------------------------
+    # ---------------------------------------------------
+    # WELLNESS ACTION PLAN
+    # ---------------------------------------------------
 
-st.subheader("💡 Personalized Wellness Action Plan")
+    st.subheader("💡 Personalized Wellness Action Plan")
 
-if risk == "LOW":
+    if risk == "LOW":
 
-    consultation_note = """
-    Maintain healthy lifestyle and regular monitoring.
-    """
+       consultation_note = """
+       Maintain healthy lifestyle and regular monitoring.
+       """
 
-    st.success("""
-### Recommended Actions
+       st.success("""
+       ### Recommended Actions
 
-✅ Maintain a consistent sleep schedule
+      ✅ Maintain a consistent sleep schedule
 
-✅ Exercise at least 30 minutes daily
+      ✅ Exercise at least 30 minutes daily
 
-✅ Continue participating in social activities
+      ✅ Continue participating in social activities
 
-✅ Practice gratitude journaling
+      ✅ Practice gratitude journaling
 
-### Helpful Resources
+       ### Helpful Resources
 
-🔗 https://www.mindful.org
+      🔗 https://www.mindful.org
 
-🔗 https://www.healthline.com
+      🔗 https://www.healthline.com
 
-🔗 https://www.helpguide.org
-""")
+      🔗 https://www.helpguide.org
+       """)
 
-elif risk == "MEDIUM":
+    elif risk == "MEDIUM":
 
-    consultation_note = """
-    Counseling session recommended within 2 weeks.
-    """
+       consultation_note = """
+       Counseling session recommended within 2 weeks.
+       """
 
-    st.warning("""
-### Recommended Actions
+       st.warning("""
+       ### Recommended Actions
 
-✅ Follow a structured routine
+      ✅ Follow a structured routine
 
-✅ Improve sleep quality
+      ✅ Improve sleep quality
 
-✅ Reduce study overload
+      ✅ Reduce study overload
 
-✅ Practice mindfulness
+      ✅ Practice mindfulness
 
-### Professional Support
+      ### Professional Support
 
-🔗 https://www.betterhelp.com
+     🔗 https://www.betterhelp.com
 
-🔗 https://www.headspace.com
+     🔗 https://www.headspace.com
 
-🔗 https://www.nimh.nih.gov
-""")
+     🔗 https://www.nimh.nih.gov
+     """)
 
-else:
+    else:
 
-    consultation_note = """
-    Immediate counseling and faculty intervention required.
-    """
+      consultation_note = """
+      Immediate counseling and faculty intervention required.
+      """
 
     st.error("""
 # 🚨 Immediate Support Recommended
