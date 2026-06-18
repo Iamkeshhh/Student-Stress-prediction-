@@ -604,10 +604,6 @@ Predicted Risk: {risk}
 
 Prediction Confidence: {confidence:.2f}%
 
-Recommended Actions:
-
-{recommendation_text}
-
 Counseling Status:
 {'Required' if risk in ['MEDIUM','HIGH'] else 'Not Required'}
 """
