@@ -337,7 +337,7 @@ elif page == "Student Analysis":
         https://www.helpguide.org/articles/stress/stress-management.htm
         """)
 
-     elif risk == "MEDIUM":
+    elif risk == "MEDIUM":
 
         st.warning("Moderate Stress Detected")
 
@@ -374,7 +374,7 @@ elif page == "Student Analysis":
         😴 7–8 Hours Sleep
          """)
 
-      else:
+    else:
 
         st.error("High Stress Level Detected")
 
