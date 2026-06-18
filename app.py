@@ -20,17 +20,26 @@ st.set_page_config(
 @st.cache_data
 def load_data(dataset_file):
 
+    import os
+
+    if not os.path.exists(dataset_file):
+        st.error(f"Dataset file not found: {dataset_file}")
+        st.stop()
+
     if dataset_file.endswith(".csv"):
         df = pd.read_csv(dataset_file)
 
     elif dataset_file.endswith(".xlsx"):
         df = pd.read_excel(dataset_file)
 
+    else:
+        st.error("Unsupported file format")
+        st.stop()
+
     df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
     df.columns = df.columns.str.strip()
 
     return df
-
 # ---------------------------------------------------
 # SIDEBAR
 # ---------------------------------------------------
