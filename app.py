@@ -33,7 +33,7 @@ df = load_data()
 models = {
     "Random Forest": joblib.load("random_forest.pkl"),
     "Decision Tree": joblib.load("decision_tree.pkl"),
-    "SVM": joblib.load("svm.pkl"),
+    "Support Vector Machine": joblib.load("svm.pkl"),
     "XGBoost": joblib.load("xgboost.pkl"),
     "Logistic Regression": joblib.load("logistic_regression.pkl")
 }
@@ -73,7 +73,6 @@ dataset_choice = st.selectbox(
     "📂 Select Dataset",
     [
         "StressLevelDataset.csv",
-        "Student Stress Factors.xlsx"
     ]
 )
 
@@ -104,10 +103,10 @@ selected_model = models[model_choice]
 
 accuracy_map = {
     "Random Forest": 89.09,
-    "Decision Tree": 89.55,
-    "XGBoost": 88.18,
-    "Support Vector Machine": 89.55,
-    "Logistic Regression": 86.64
+    "Decision Tree": 85.45,
+    "XGBoost": 86.82,
+    "Support Vector Machine": 88.64,
+    "Logistic Regression": 88.18
 }
 
 accuracy = accuracy_map[model_choice]
