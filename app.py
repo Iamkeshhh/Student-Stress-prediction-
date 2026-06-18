@@ -413,78 +413,118 @@ elif page == "Student Analysis":
     # ---------------------------------------------------
     # RECOMMENDATIONS
     # ---------------------------------------------------
-
-    st.subheader("💡 Personalized Wellness Action Plan")
-
     if risk == "LOW":
 
-      recommendation_text = """
-      Maintain a consistent sleep schedule.
-      Exercise at least 30 minutes daily.
-      Continue participating in social activities.
-      Practice gratitude journaling.
+       st.success("Healthy Mental State Detected")
 
-      Resources:
-      https://www.mindful.org
-      https://www.healthline.com
-      https://www.helpguide.org
-      """
+       st.markdown("""
+       ### Recommended Actions
 
-      st.success("Healthy Mental State Detected")
+       ✅ Maintain a consistent sleep schedule
 
-     elif risk == "MEDIUM":
+       ✅ Exercise at least 30 minutes daily
 
-      recommendation_text = """
-      Follow a structured daily routine.
-      Reduce academic overload.
-      Use Pomodoro study techniques.
-      Practice mindfulness daily.
-      Reach out to trusted friends or mentors.
+       ✅ Continue participating in social activities
 
-      Resources:
-      https://www.betterhelp.com
-      https://www.headspace.com
-      https://www.nimh.nih.gov
-      """
+       ✅ Practice gratitude journaling
 
-      st.warning("Moderate Stress Detected")
+       ### Helpful Resources
 
-     else:
+       🔗 Mindfulness Guide:
+        https://www.mindful.org/meditation/mindfulness-getting-started/
 
-      recommendation_text = """
-      Immediate counseling recommended.
-      Inform faculty mentor.
-      Reduce academic burden.
-      Increase social support.
-      Avoid isolation.
+       🔗 Breathing Exercises:
+        https://www.healthline.com/health/breathing-exercise
 
-      Resources:
-      https://www.betterhelp.com
-      https://www.7cups.com
-      https://www.headspace.com
-      https://www.calm.com
-      """
+       🔗 Stress Management Tips:
+        https://www.helpguide.org/articles/stress/stress-management.htm
+        """)
 
-      st.error("High Stress Level Detected")
+    elif risk == "MEDIUM":
 
-        st.subheader("💡 Personalized Recommendations")
-        pdf_file = create_pdf_report(
-    student_name=student["Student_Name"],
-    model_name=model_choice,
-    risk=risk,
-    confidence=confidence,
-    recommendations=recommendations
-)
-        st.download_button(
-    label="📥 Download Assessment Report",
-    data=pdf_file,
-    file_name=f"{student['Student_Name']}_MentalHealthReport.pdf",
-    mime="application/pdf"
-)
+        st.warning("Moderate Stress Detected")
 
-# =====================================================
-# COUNSELING CONSULTATION FORM
-# =====================================================
+        st.markdown("""
+        ### Recommended Actions
+
+        ✅ Follow a structured daily routine
+
+        ✅ Reduce academic overload
+
+        ✅ Use Pomodoro study techniques
+
+        ✅ Practice mindfulness for 10–15 minutes daily
+
+        ✅ Reach out to trusted friends or mentors
+
+         ### Professional Support
+
+        🔗 BetterHelp:
+         https://www.betterhelp.com/
+
+        🔗 Mindfulness Meditation:
+         https://www.headspace.com/meditation
+
+        🔗 Anxiety Management Resources:
+         https://www.nimh.nih.gov/health/topics/anxiety-disorders
+
+         ### Suggested Daily Goal
+
+        🧘 15 Minutes Meditation
+
+        🚶 20 Minutes Walking
+
+        😴 7–8 Hours Sleep
+         """)
+
+    else:
+
+        st.error("High Stress Level Detected")
+
+        st.markdown("""
+        # 🚨 Immediate Support Recommended
+
+        ### Action Plan
+
+        1. Schedule a counseling session immediately.
+
+        2. Inform a faculty mentor or trusted guardian.
+
+        3. Reduce non-essential academic workload.
+
+        4. Increase social interactions with trusted friends.
+
+        5. Avoid isolation.
+
+        ### Professional Consultation
+
+       🔗 BetterHelp Online Counseling
+        https://www.betterhelp.com/
+
+       🔗 7 Cups Emotional Support
+        https://www.7cups.com/
+
+       🔗 NIMH Mental Health Resources
+        https://www.nimh.nih.gov/
+
+        ### Guided Relaxation
+
+       🔗 Headspace
+        https://www.headspace.com/
+
+       🔗 Calm
+        https://www.calm.com/
+
+        ### Emergency Help
+
+        If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
+         """)
+
+    
+
+    # =====================================================
+    # COUNSELING CONSULTATION FORM
+    # =====================================================
 
     if risk in ["MEDIUM", "HIGH"]:
 
