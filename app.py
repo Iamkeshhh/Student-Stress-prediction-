@@ -301,7 +301,7 @@ elif page == "Student Analysis":
 # CONSULTATION FORM
 # ---------------------------------------------------
 
-     if risk in ["MEDIUM", "HIGH"]:
+    if risk in ["MEDIUM", "HIGH"]:
 
        st.markdown("---")
 
