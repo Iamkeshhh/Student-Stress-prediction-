@@ -531,6 +531,12 @@ elif page == "Student Analysis":
     confidence=confidence,
     recommendations=recommendations
 )
+        st.download_button(
+    label="📥 Download Assessment Report",
+    data=pdf_file,
+    file_name=f"{student['Student_Name']}_MentalHealthReport.pdf",
+    mime="application/pdf"
+)
 
 # =====================================================
 # COUNSELING CONSULTATION FORM
