@@ -200,7 +200,7 @@ if st.button(
 # STUDENT ANALYSIS
 # ---------------------------------------------------
 
-elif page == "Student Analysis":
+elif page == "Student Analysis"
 
     st.title("🎯 Student Mental Health Analyzer")
 
