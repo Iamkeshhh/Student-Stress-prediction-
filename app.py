@@ -186,16 +186,16 @@ elif page == "Student Analysis":
 
     st.subheader("💡 Personalized Wellness Action Plan")
 
-if risk == "LOW":
+    if risk == "LOW":
 
-    st.success("Healthy Mental State Detected")
+      st.success("Healthy Mental State Detected")
 
-    st.markdown("""
-### Recommended Actions
+      st.markdown("""
+      ### Recommended Actions
 
-✅ Maintain a consistent sleep schedule
+     ✅ Maintain a consistent sleep schedule
 
-✅ Exercise at least 30 minutes daily
+     ✅ Exercise at least 30 minutes daily
 
 ✅ Continue participating in social activities
 
