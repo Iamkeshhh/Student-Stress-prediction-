@@ -311,6 +311,8 @@ elif page == "Student Analysis":
 
     st.subheader("💡 Personalized Wellness Action Plan")
 
+st.write("Risk value:", risk)
+
 if risk == "LOW":
 
     st.success("Healthy Mental State Detected")
