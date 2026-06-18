@@ -419,6 +419,7 @@ elif page == "Student Analysis":
 
        st.markdown("""
        ### Recommended Actions
+       recommendation_text = """
 
        ✅ Maintain a consistent sleep schedule
 
@@ -439,6 +440,7 @@ elif page == "Student Analysis":
        🔗 Stress Management Tips:
         https://www.helpguide.org/articles/stress/stress-management.htm
         """)
+        """
 
     elif risk == "MEDIUM":
 
@@ -446,6 +448,7 @@ elif page == "Student Analysis":
 
         st.markdown("""
         ### Recommended Actions
+        recommendation_text = """
 
         ✅ Follow a structured daily routine
 
@@ -476,6 +479,7 @@ elif page == "Student Analysis":
 
         😴 7–8 Hours Sleep
          """)
+         """
 
     else:
 
@@ -514,6 +518,7 @@ elif page == "Student Analysis":
 
        🔗 Calm
         https://www.calm.com/
+        """
 
         ### Emergency Help
 
