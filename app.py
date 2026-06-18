@@ -57,22 +57,6 @@ if page == "Home":
         "### Dataset & Model Configuration"
     )
 
-    # =====================================
-    # DATASET SELECTION
-    # =====================================
-
-    dataset_choice = st.selectbox(
-        "📂 Select Dataset",
-        [
-            "StressLevelDataset.csv",
-            "Student Stress Factors.xlsx"
-        ]
-    )
-
-    st.success(
-        f"Selected Dataset: {dataset_choice}"
-    )
-
 
 # =====================================
 # DATASET SELECTION
