@@ -2,6 +2,14 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import joblib
+from io import BytesIO
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer
+)
+from reportlab.lib.styles import getSampleStyleSheet
 
 # ---------------------------------------------------
 # PAGE CONFIG
@@ -38,6 +46,76 @@ models = {
     "Logistic Regression": joblib.load("logistic_regression.pkl")
 }
 
+def create_pdf_report(
+    student_name,
+    model_name,
+    risk,
+    confidence,
+    recommendations
+):
+
+    buffer = BytesIO()
+
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=letter
+    )
+
+    styles = getSampleStyleSheet()
+
+    content = []
+
+    content.append(
+        Paragraph(
+            "Student Mental Health Assessment Report",
+            styles["Title"]
+        )
+    )
+
+    content.append(Spacer(1, 12))
+
+    content.append(
+        Paragraph(
+            f"<b>Student Name:</b> {student_name}",
+            styles["BodyText"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            f"<b>Predicted Risk:</b> {risk}",
+            styles["BodyText"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            f"<b>Confidence:</b> {confidence:.2f}%",
+            styles["BodyText"]
+        )
+    )
+
+    content.append(Spacer(1, 20))
+
+    content.append(
+        Paragraph(
+            "<b>Recommendations</b>",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            recommendations,
+            styles["BodyText"]
+        )
+    )
+
+    doc.build(content)
+
+    buffer.seek(0)
+
+    return buffer
 # ---------------------------------------------------
 # SIDEBAR
 # ---------------------------------------------------
@@ -446,7 +524,20 @@ elif page == "Student Analysis":
         If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
          """)
 
-        st.subheader("💡 Personalized Recommendations")
+          pdf_file = create_pdf_report(
+         student_name=student["Student_Name"],
+         model_name=model_choice,
+         risk=risk,
+         confidence=confidence,
+         recommendations=recommendations
+        )
+
+          st.download_button(
+         label="📥 Download Assessment Report",
+         data=pdf_file,
+         file_name=f"{student['Student_Name']}_MentalHealthReport.pdf",
+         mime="application/pdf"
+         )
 
 # =====================================================
 # COUNSELING CONSULTATION FORM
