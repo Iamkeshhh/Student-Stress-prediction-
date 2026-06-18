@@ -420,15 +420,11 @@ elif page == "Student Analysis":
         st.subheader("💡 Personalized Recommendations")
 
     if risk == "LOW":
-        ---
-    
-    
+        
     elif risk == "MEDIUM":
-        ---
-    
-
+        
     else:
-        ---
+        
     
 
 # =====================================================
