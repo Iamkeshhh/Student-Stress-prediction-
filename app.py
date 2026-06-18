@@ -29,6 +29,13 @@ def load_data():
     return df
 
 df = load_data()
+models = {
+    "Random Forest": joblib.load("random_forest.pkl"),
+    "Decision Tree": joblib.load("decision_tree.pkl"),
+    "SVM": joblib.load("svm.pkl"),
+    "XGBoost": joblib.load("xgboost.pkl"),
+    "Logistic Regression": joblib.load("logistic_regression.pkl")
+}
 
 # ---------------------------------------------------
 # SIDEBAR
@@ -88,20 +95,18 @@ model_choice = st.selectbox(
     ]
 )
 
-st.success(
-    f"Selected Model: {model_choice}"
-)
+selected_model = models[model_choice]
 
 # =====================================
 # MODEL ACCURACY
 # =====================================
 
 accuracy_map = {
-    "Random Forest": 96.5,
-    "Decision Tree": 91.2,
-    "XGBoost": 97.4,
-    "Support Vector Machine": 93.7,
-    "Logistic Regression": 89.4
+    "Random Forest": 89.09,
+    "Decision Tree": 89.55,
+    "XGBoost": 88.18,
+    "Support Vector Machine": 89.55,
+    "Logistic Regression": 86.64
 }
 
 accuracy = accuracy_map[model_choice]
@@ -213,7 +218,13 @@ elif page == "Student Analysis":
     )
 
     # Student Record
-    student = df[df[student_column] == selected_student].iloc[0]
+    student = df[df["Student_Name"] == selected_student].iloc[0]
+
+    features = student.drop(
+    labels=["Student_Name", "stress_level"]
+    )
+
+    features = pd.DataFrame([features])
 
     # ---------------------------------------------------
     # PROFILE HEADER
@@ -233,21 +244,39 @@ elif page == "Student Analysis":
         int(student["stress_level"])
     )
 
-    risk_score = (
-        student["anxiety_level"]
-        + student["depression"]
-        + student["peer_pressure"]
-        + student["bullying"]
-        + student["future_career_concerns"]
-        - student["sleep_quality"]
-    )
+    prediction = selected_model.predict(features)[0]
 
-    col3.metric(
-        "Risk Score",
-        round(risk_score, 1)
-    )
+    if prediction == 0:
+      risk = "LOW"
+
+    elif prediction == 1:
+      risk = "MEDIUM"
+
+    else:
+      risk = "HIGH"
 
     st.divider()
+
+    st.info(
+    f"Prediction generated using {model_choice}"
+    )
+
+    if hasattr(selected_model, "predict_proba"):
+
+    probabilities = selected_model.predict_proba(features)[0]
+
+    confidence = max(probabilities) * 100
+
+    st.metric(
+        "Prediction Confidence",
+        f"{confidence:.2f}%"
+    )  
+
+    risk_score = {
+    "LOW": 10,
+    "MEDIUM": 25,
+    "HIGH": 45
+    }[risk]
 
     # ---------------------------------------------------
     # GAUGE CHART
