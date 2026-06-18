@@ -525,12 +525,12 @@ elif page == "Student Analysis":
          """)
 
          pdf_file = create_pdf_report(
-           student_name=student["Student_Name"],
-           model_name=model_choice,
-           risk=risk,
-           confidence=confidence,
-           recommendations=recommendations
-         )
+    student_name=student["Student_Name"],
+    model_name=model_choice,
+    risk=risk,
+    confidence=confidence,
+    recommendations=recommendations
+)
 
 # =====================================================
 # COUNSELING CONSULTATION FORM
