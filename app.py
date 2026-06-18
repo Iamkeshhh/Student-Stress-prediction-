@@ -525,18 +525,11 @@ elif page == "Student Analysis":
          """)
 
          pdf_file = create_pdf_report(
-         student_name=student["Student_Name"],
-         model_name=model_choice,
-         risk=risk,
-         confidence=confidence,
-         recommendations=recommendations
-        )
-
-         st.download_button(
-         label="📥 Download Assessment Report",
-         data=pdf_file,
-         file_name=f"{student['Student_Name']}_MentalHealthReport.pdf",
-         mime="application/pdf"
+           student_name=student["Student_Name"],
+           model_name=model_choice,
+           risk=risk,
+           confidence=confidence,
+           recommendations=recommendations
          )
 
 # =====================================================
