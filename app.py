@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-import joblib
 
 # ---------------------------------------------------
 # PAGE CONFIG
@@ -18,28 +17,19 @@ st.set_page_config(
 # ---------------------------------------------------
 
 @st.cache_data
-def load_data(dataset_file):
+def load_data():
+    df = pd.read_csv("StressLevelDataset.csv")
 
-    import os
-
-    if not os.path.exists(dataset_file):
-        st.error(f"Dataset file not found: {dataset_file}")
-        st.stop()
-
-    if dataset_file.endswith(".csv"):
-        df = pd.read_csv(dataset_file)
-
-    elif dataset_file.endswith(".xlsx"):
-        df = pd.read_excel(dataset_file)
-
-    else:
-        st.error("Unsupported file format")
-        st.stop()
-
+    # Remove unwanted columns
     df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
+
+    # Remove spaces from column names
     df.columns = df.columns.str.strip()
 
     return df
+
+df = load_data()
+
 # ---------------------------------------------------
 # SIDEBAR
 # ---------------------------------------------------
@@ -60,12 +50,12 @@ page = st.sidebar.radio(
 
 if page == "Home":
 
-    st.title("🧠 AI Student Mental Health Platform")
+  
+  st.title("🧠 AI Student Mental Health Platform")
 
-    st.markdown(
-        "### Dataset & Model Configuration"
-    )
-
+  st.markdown(
+    "### Dataset & Model Configuration"
+)
 
 # =====================================
 # DATASET SELECTION
@@ -75,25 +65,17 @@ dataset_choice = st.selectbox(
     "📂 Select Dataset",
     [
         "StressLevelDataset.csv",
-        "Student Stress Factors(2).xlsx"
+        "Student Stress Factors.xlsx"
     ]
 )
 
-st.session_state["dataset"] = dataset_choice
-
-df = load_data(st.session_state["dataset"])
+st.success(
+    f"Selected Dataset: {dataset_choice}"
+)
 
 # =====================================
 # MODEL SELECTION
 # =====================================
-
-models = {
-    "Random Forest": joblib.load("random_forest.pkl"),
-    "Decision Tree": joblib.load("decision_tree.pkl"),
-    "XGBoost": joblib.load("xgboost.pkl"),
-    "Support Vector Machine": joblib.load("svm.pkl"),
-    "Linear Regression": joblib.load("linear_regression.pkl")
-}
 
 model_choice = st.selectbox(
     "🤖 Select Prediction Model",
@@ -106,7 +88,9 @@ model_choice = st.selectbox(
     ]
 )
 
-st.session_state["model"] = model_choice
+st.success(
+    f"Selected Model: {model_choice}"
+)
 
 # =====================================
 # MODEL ACCURACY
@@ -228,14 +212,6 @@ elif page == "Student Analysis":
         sorted(df[student_column].dropna().unique())
     )
 
-    st.info(
-    f"Dataset: {st.session_state.get('dataset')}"
-    )
-
-    st.info(
-    f"Model: {st.session_state.get('model')}"
-    )
-
     # Student Record
     student = df[df[student_column] == selected_student].iloc[0]
 
@@ -257,23 +233,21 @@ elif page == "Student Analysis":
         int(student["stress_level"])
     )
 
-    selected_model = models[
-    st.session_state["model"]
-    ]
+    risk_score = (
+        student["anxiety_level"]
+        + student["depression"]
+        + student["peer_pressure"]
+        + student["bullying"]
+        + student["future_career_concerns"]
+        - student["sleep_quality"]
+    )
 
-    features = pd.DataFrame([{
-    "anxiety_level": student["anxiety_level"],
-    "depression": student["depression"],
-    "peer_pressure": student["peer_pressure"],
-    "bullying": student["bullying"],
-    "future_career_concerns": student["future_career_concerns"],
-    "sleep_quality": student["sleep_quality"]
-    }])
+    col3.metric(
+        "Risk Score",
+        round(risk_score, 1)
+    )
 
-    prediction = selected_model.predict(features)[0]
-
-
-    st.divider() 
+    st.divider()
 
     # ---------------------------------------------------
     # GAUGE CHART
