@@ -418,110 +418,54 @@ elif page == "Student Analysis":
 
     if risk == "LOW":
 
-       st.success("Healthy Mental State Detected")
+    recommendation_text = """
+Maintain a consistent sleep schedule.
+Exercise at least 30 minutes daily.
+Continue participating in social activities.
+Practice gratitude journaling.
 
-       st.markdown("""
-       ### Recommended Actions
+Resources:
+https://www.mindful.org
+https://www.healthline.com
+https://www.helpguide.org
+"""
 
-       ✅ Maintain a consistent sleep schedule
+    st.success("Healthy Mental State Detected")
 
-       ✅ Exercise at least 30 minutes daily
+elif risk == "MEDIUM":
 
-       ✅ Continue participating in social activities
+    recommendation_text = """
+Follow a structured daily routine.
+Reduce academic overload.
+Use Pomodoro study techniques.
+Practice mindfulness daily.
+Reach out to trusted friends or mentors.
 
-       ✅ Practice gratitude journaling
+Resources:
+https://www.betterhelp.com
+https://www.headspace.com
+https://www.nimh.nih.gov
+"""
 
-       ### Helpful Resources
+    st.warning("Moderate Stress Detected")
 
-       🔗 Mindfulness Guide:
-        https://www.mindful.org/meditation/mindfulness-getting-started/
+else:
 
-       🔗 Breathing Exercises:
-        https://www.healthline.com/health/breathing-exercise
+    recommendation_text = """
+Immediate counseling recommended.
+Inform faculty mentor.
+Reduce academic burden.
+Increase social support.
+Avoid isolation.
 
-       🔗 Stress Management Tips:
-        https://www.helpguide.org/articles/stress/stress-management.htm
-        """)
+Resources:
+https://www.betterhelp.com
+https://www.7cups.com
+https://www.headspace.com
+https://www.calm.com
+"""
 
-    elif risk == "MEDIUM":
-
-        st.warning("Moderate Stress Detected")
-
-        st.markdown("""
-        ### Recommended Actions
-
-        ✅ Follow a structured daily routine
-
-        ✅ Reduce academic overload
-
-        ✅ Use Pomodoro study techniques
-
-        ✅ Practice mindfulness for 10–15 minutes daily
-
-        ✅ Reach out to trusted friends or mentors
-
-         ### Professional Support
-
-        🔗 BetterHelp:
-         https://www.betterhelp.com/
-
-        🔗 Mindfulness Meditation:
-         https://www.headspace.com/meditation
-
-        🔗 Anxiety Management Resources:
-         https://www.nimh.nih.gov/health/topics/anxiety-disorders
-
-         ### Suggested Daily Goal
-
-        🧘 15 Minutes Meditation
-
-        🚶 20 Minutes Walking
-
-        😴 7–8 Hours Sleep
-         """)
-
-    else:
-
-        st.error("High Stress Level Detected")
-
-        st.markdown("""
-        # 🚨 Immediate Support Recommended
-
-        ### Action Plan
-
-        1. Schedule a counseling session immediately.
-
-        2. Inform a faculty mentor or trusted guardian.
-
-        3. Reduce non-essential academic workload.
-
-        4. Increase social interactions with trusted friends.
-
-        5. Avoid isolation.
-
-        ### Professional Consultation
-
-       🔗 BetterHelp Online Counseling
-        https://www.betterhelp.com/
-
-       🔗 7 Cups Emotional Support
-        https://www.7cups.com/
-
-       🔗 NIMH Mental Health Resources
-        https://www.nimh.nih.gov/
-
-        ### Guided Relaxation
-
-       🔗 Headspace
-        https://www.headspace.com/
-
-       🔗 Calm
-        https://www.calm.com/
-
-        ### Emergency Help
-
-        If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
-         """)
+    st.error("High Stress Level Detected")
 
         st.subheader("💡 Personalized Recommendations")
         pdf_file = create_pdf_report(
@@ -603,8 +547,6 @@ Student Name: {student['Student_Name']}
 Predicted Risk: {risk}
 
 Prediction Confidence: {confidence:.2f}%
-
-Recommended Actions: {recommendation_text}
 
 Counseling Status:
 {'Required' if risk in ['MEDIUM','HIGH'] else 'Not Required'}
