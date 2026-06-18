@@ -193,7 +193,7 @@ if st.button(
     )
 
     st.balloons()
-```
+
 
 # ---------------------------------------------------
 # STUDENT ANALYSIS
@@ -420,13 +420,13 @@ elif page == "Student Analysis":
         st.subheader("💡 Personalized Recommendations")
 
     if risk == "LOW":
-    ...
+    
     
     elif risk == "MEDIUM":
-    ...
+    
 
     else:
-    ...
+    
 
 # =====================================================
 # COUNSELING CONSULTATION FORM
