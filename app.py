@@ -418,48 +418,48 @@ elif page == "Student Analysis":
 
     if risk == "LOW":
 
-    recommendation_text = """
-Maintain a consistent sleep schedule.
-Exercise at least 30 minutes daily.
-Continue participating in social activities.
-Practice gratitude journaling.
+      recommendation_text = """
+      Maintain a consistent sleep schedule.
+      Exercise at least 30 minutes daily.
+      Continue participating in social activities.
+      Practice gratitude journaling.
 
-Resources:
-https://www.mindful.org
-https://www.healthline.com
-https://www.helpguide.org
-"""
+      Resources:
+      https://www.mindful.org
+      https://www.healthline.com
+      https://www.helpguide.org
+      """
 
-    st.success("Healthy Mental State Detected")
+      st.success("Healthy Mental State Detected")
 
-elif risk == "MEDIUM":
+    elif risk == "MEDIUM":
 
-    recommendation_text = """
-Follow a structured daily routine.
-Reduce academic overload.
-Use Pomodoro study techniques.
-Practice mindfulness daily.
-Reach out to trusted friends or mentors.
+      recommendation_text = """
+      Follow a structured daily routine.
+      Reduce academic overload.
+      Use Pomodoro study techniques.
+      Practice mindfulness daily.
+      Reach out to trusted friends or mentors.
 
-Resources:
-https://www.betterhelp.com
-https://www.headspace.com
-https://www.nimh.nih.gov
-"""
+      Resources:
+      https://www.betterhelp.com
+      https://www.headspace.com
+      https://www.nimh.nih.gov
+      """
 
-    st.warning("Moderate Stress Detected")
+      st.warning("Moderate Stress Detected")
 
-else:
+     else:
 
-    recommendation_text = """
-Immediate counseling recommended.
-Inform faculty mentor.
-Reduce academic burden.
-Increase social support.
-Avoid isolation.
+      recommendation_text = """
+      Immediate counseling recommended.
+      Inform faculty mentor.
+      Reduce academic burden.
+      Increase social support.
+      Avoid isolation.
 
-Resources:
-https://www.betterhelp.com
+      Resources:
+      https://www.betterhelp.com
 https://www.7cups.com
 https://www.headspace.com
 https://www.calm.com
