@@ -50,157 +50,32 @@ page = st.sidebar.radio(
 
 if page == "Home":
 
+    st.title("🎓 AI Powered Student Mental Health Platform")
 
-  st.title("🧠 AI Student Mental Health Platform")
+    c1, c2, c3, c4 = st.columns(4)
 
-  st.markdown(
-    "### Dataset & Model Configuration"
-)
+    c1.metric("Students", len(df))
+    c2.metric("Features", len(df.columns))
 
-# =====================================
-# DATASET SELECTION
-# =====================================
+    c3.metric(
+        "High Stress",
+        len(df[df["stress_level"] == 2])
+    )
 
-dataset_choice = st.selectbox(
-    "📂 Select Dataset",
-    [
-        "StressLevelDataset.csv",
-        "Student Stress Factors.xlsx"
-    ]
-)
-
-st.success(
-    f"Selected Dataset: {dataset_choice}"
-)
-
-# =====================================
-# MODEL SELECTION
-# =====================================
-
-model_choice = st.selectbox(
-    "🤖 Select Prediction Model",
-    [
-        "Random Forest",
-        "Decision Tree",
-        "XGBoost",
-        "Support Vector Machine",
-        "Logistic Regression"
-    ]
-)
-
-st.success(
-    f"Selected Model: {model_choice}"
-)
-
-# =====================================
-# MODEL ACCURACY
-# =====================================
-
-accuracy_map = {
-    "Random Forest": 96.5,
-    "Decision Tree": 91.2,
-    "XGBoost": 97.4,
-    "Support Vector Machine": 93.7,
-    "Logistic Regression": 89.4
-}
-
-accuracy = accuracy_map[model_choice]
-
-c1, c2, c3 = st.columns(3)
-
-c1.metric(
-    "Dataset Records",
-    len(df)
-)
-
-c2.metric(
-    "Features",
-    len(df.columns)
-)
-
-c3.metric(
-    "Model Accuracy",
-    f"{accuracy}%"
-)
-
-st.divider()
-
-# =====================================
-# DATASET PREVIEW
-# =====================================
-
-st.subheader(
-    "📊 Dataset Preview"
-)
-
-st.dataframe(
-    df.head(),
-    use_container_width=True
-)
-
-st.divider()
-
-# =====================================
-# MODEL DESCRIPTION
-# =====================================
-
-st.subheader(
-    "🤖 Selected Model Information"
-)
-
-if model_choice == "Random Forest":
+    c4.metric(
+        "Low Stress",
+        len(df[df["stress_level"] == 0])
+    )
 
     st.info(
-        "Random Forest combines multiple decision trees and provides high accuracy with reduced overfitting."
+        "Use the Student Analysis page to view complete student profiles and recommendations."
     )
-
-elif model_choice == "Decision Tree":
-
-    st.info(
-        "Decision Tree uses hierarchical splitting to classify stress levels."
-    )
-
-elif model_choice == "XGBoost":
-
-    st.info(
-        "XGBoost is a boosting algorithm that delivers high predictive performance."
-    )
-
-elif model_choice == "Support Vector Machine":
-
-    st.info(
-        "SVM separates stress categories using optimal decision boundaries."
-    )
-
-else:
-
-    st.info(
-        "Logistic Regression estimates the probability of stress classes."
-    )
-
-st.divider()
-
-# =====================================
-# RUN MODEL BUTTON
-# =====================================
-
-if st.button(
-    "🚀 Run Prediction Model"
-):
-
-    st.success(
-        f"{model_choice} loaded successfully."
-    )
-
-    st.balloons()
-
-
 
 # ---------------------------------------------------
 # STUDENT ANALYSIS
 # ---------------------------------------------------
 
-elif page == "Student Analysis"
+elif page == "Student Analysis":
 
     st.title("🎯 Student Mental Health Analyzer")
 
@@ -309,14 +184,9 @@ elif page == "Student Analysis"
     # RECOMMENDATIONS
     # ---------------------------------------------------
 
-   elif page == "Student Analysis":
-
-    ...
-
     st.subheader("💡 Personalized Wellness Action Plan")
 
-    if risk == "LOW":
-        ...
+if risk == "LOW":
 
     st.success("Healthy Mental State Detected")
 
@@ -423,7 +293,7 @@ https://www.calm.com/
 If the student expresses thoughts of self-harm or immediate danger, contact local emergency services or a mental health crisis service immediately.
 """)
 
-    
+    st.subheader("💡 Personalized Recommendations")
 
 if risk == "LOW":
     ...
@@ -471,7 +341,6 @@ if risk in ["MEDIUM", "HIGH"]:
                 "The student wellness team will contact you soon."
             )
 
-
     # ---------------------------------------------------
     # COMPLETE STUDENT DETAILS
     # ---------------------------------------------------
@@ -490,6 +359,3 @@ if risk in ["MEDIUM", "HIGH"]:
     )
 
     st.divider()
-
-
-    
