@@ -432,7 +432,7 @@ elif page == "Student Analysis":
 
       st.success("Healthy Mental State Detected")
 
-    elif risk == "MEDIUM":
+     elif risk == "MEDIUM":
 
       recommendation_text = """
       Follow a structured daily routine.
@@ -460,12 +460,12 @@ elif page == "Student Analysis":
 
       Resources:
       https://www.betterhelp.com
-https://www.7cups.com
-https://www.headspace.com
-https://www.calm.com
-"""
+      https://www.7cups.com
+      https://www.headspace.com
+      https://www.calm.com
+      """
 
-    st.error("High Stress Level Detected")
+      st.error("High Stress Level Detected")
 
         st.subheader("💡 Personalized Recommendations")
         pdf_file = create_pdf_report(
