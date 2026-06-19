@@ -400,14 +400,38 @@ elif page == "Student Analysis":
 
     st.subheader("🚨 Risk Assessment")
 
-    if risk == "LOW":
-        st.success("LOW RISK STUDENT")
+    if prediction == 0:
+        risk = "LOW"
 
-    elif risk == "MEDIUM":
-        st.warning("MEDIUM RISK STUDENT")
+    elif prediction == 1:
+        risk = "MEDIUM"
 
     else:
-        st.error("HIGH RISK STUDENT")
+        risk = "HIGH"
+    st.info(f"📋 Consultation Note: {consultation_note}")
+
+
+    # =====================================
+    # CONSULTATION NOTE
+    # =====================================
+
+    if risk == "LOW":
+        consultation_note = (
+          "Low Risk: Preventive wellness guidance recommended. "
+          "No clinical intervention required."
+    )
+
+    elif risk == "MEDIUM":
+        consultation_note = (
+         "Medium Risk: Counseling session recommended. "
+         "Follow-up assessment suggested within 14 days."
+    )
+
+    else:
+        consultation_note = (
+         "High Risk: Immediate psychological counseling, "
+         "faculty intervention, and continuous monitoring recommended."
+    )
 
 
     # ---------------------------------------------------
@@ -595,9 +619,12 @@ elif page == "Student Analysis":
             Predicted Risk: {risk}
             Model Used: {model_choice}
 
-            Consultation Note:
+            report_text += f"""
 
+            CONSULTATION NOTE
+            -----------------
             {consultation_note}
+
             """
 
             st.download_button(
