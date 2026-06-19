@@ -400,38 +400,14 @@ elif page == "Student Analysis":
 
     st.subheader("🚨 Risk Assessment")
 
-    if prediction == 0:
-        risk = "LOW"
-
-    elif prediction == 1:
-        risk = "MEDIUM"
-
-    else:
-        risk = "HIGH"
-    st.info(f"📋 Consultation Note: {consultation_note}")
-
-
-    # =====================================
-    # CONSULTATION NOTE
-    # =====================================
-
     if risk == "LOW":
-        consultation_note = (
-          "Low Risk: Preventive wellness guidance recommended. "
-          "No clinical intervention required."
-    )
+        st.success("LOW RISK STUDENT")
 
     elif risk == "MEDIUM":
-        consultation_note = (
-         "Medium Risk: Counseling session recommended. "
-         "Follow-up assessment suggested within 14 days."
-    )
+        st.warning("MEDIUM RISK STUDENT")
 
     else:
-        consultation_note = (
-         "High Risk: Immediate psychological counseling, "
-         "faculty intervention, and continuous monitoring recommended."
-    )
+        st.error("HIGH RISK STUDENT")
 
 
     # ---------------------------------------------------
@@ -595,42 +571,52 @@ elif page == "Student Analysis":
             st.subheader("📋 Complete Student Information")
 
             details = pd.DataFrame({
-            "Feature": student.index,
-            "Value": student.values
+              "Feature": student.index,
+              "Value": student.values
             })
 
             st.dataframe(
-            details,
-            use_container_width=True,
-            hide_index=True
+               details,
+               use_container_width=True,
+               hide_index=True
             )
 
-            # ---------------------------------------------------
-            # DOWNLOAD REPORT
-            # ---------------------------------------------------
-
-            st.subheader("📄 Download Student Report")
-
-            report_text = f"""
+           
+            report = f"""
+            =====================================
             STUDENT MENTAL HEALTH REPORT
+            =====================================
 
-            Student Name: {student['Student_Name']}
-            Dataset Stress Level: {student['stress_level']}
-            Predicted Risk: {risk}
-            Model Used: {model_choice}
+            Student Name:
+            {student['Student_Name']}
 
-            report_text += f"""
+            Model Used:
+            {model_choice}
 
-            CONSULTATION NOTE
-            -----------------
-            {consultation_note}
+            Predicted Risk:
+            {risk}
 
+            Prediction Confidence:
+            {confidence:.2f}%
+
+
+            -------------------------------------
+            COUNSELING STATUS
+            -------------------------------------
+
+            {"Counseling Recommended" if risk in ["MEDIUM","HIGH"] else "Regular Monitoring"}
+
+            -------------------------------------
+            STUDENT DETAILS
+            -------------------------------------
+
+            for col in student.index:
+               report += f"\n{col}: {student[col]}"
 
             st.download_button(
-            label="📥 Download Report",
-            data=report_text,
-            file_name=f"{selected_student}_report.txt",
-            mime="text/plain"
+               label="📄 Download Full Mental Health Report",
+               data=report,
+               file_name=f"{student['Student_Name']}_Mental_Health_Report.txt",
+               mime="text/plain"
             )
-
-            st.divider()                                 
+            st.divider()
