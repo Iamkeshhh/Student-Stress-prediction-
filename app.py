@@ -564,59 +564,47 @@ elif page == "Student Analysis":
                 "The student wellness team will contact you soon."
             )
 
-    # ---------------------------------------------------
-    # COMPLETE STUDENT DETAILS
-    # ---------------------------------------------------
+            # ---------------------------------------------------
+            # COMPLETE STUDENT DETAILS
+            # ---------------------------------------------------
 
-    st.subheader("📋 Complete Student Information")
+            st.subheader("📋 Complete Student Information")
 
-    details = pd.DataFrame({
-        "Feature": student.index,
-        "Value": student.values
-    })
+            details = pd.DataFrame({
+            "Feature": student.index,
+            "Value": student.values
+            })
 
-    st.dataframe(
-        details,
-        use_container_width=True,
-        hide_index=True
-    )
+            st.dataframe(
+            details,
+            use_container_width=True,
+            hide_index=True
+            )
 
-    st.divider()
-    report = f"""
-=====================================
-STUDENT MENTAL HEALTH REPORT
-=====================================
+            # ---------------------------------------------------
+            # DOWNLOAD REPORT
+            # ---------------------------------------------------
 
-Student Name:
-{student['Student_Name']}
+            st.subheader("📄 Download Student Report")
 
-Model Used:
-{model_choice}
+            report_text = f"""
+            STUDENT MENTAL HEALTH REPORT
 
-Predicted Risk:
-{risk}
+            Student Name: {student['Student_Name']}
+            Dataset Stress Level: {student['stress_level']}
+            Predicted Risk: {risk}
+            Model Used: {model_choice}
 
-Prediction Confidence:
-{confidence:.2f}%
+            Consultation Note:
 
+            {consultation_note}
+            """
 
--------------------------------------
-COUNSELING STATUS
--------------------------------------
+            st.download_button(
+            label="📥 Download Report",
+            data=report_text,
+            file_name=f"{selected_student}_report.txt",
+            mime="text/plain"
+            )
 
-{"Counseling Recommended" if risk in ["MEDIUM","HIGH"] else "Regular Monitoring"}
-
--------------------------------------
-STUDENT DETAILS
--------------------------------------
-"""
-
-for col in student.index:
-    report += f"\n{col}: {student[col]}"
-
-st.download_button(
-    label="📄 Download Full Mental Health Report",
-    data=report,
-    file_name=f"{student['Student_Name']}_Mental_Health_Report.txt",
-    mime="text/plain"
-)
+            st.divider()                                 
