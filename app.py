@@ -50,7 +50,10 @@ def create_pdf_report(
     model_name,
     risk,
     confidence,
-    recommendations
+    consultation_note,
+    recommendations,
+    consultation_details,
+    student_details
 ):
 
     buffer = BytesIO()
