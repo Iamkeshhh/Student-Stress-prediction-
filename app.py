@@ -579,4 +579,7 @@ elif page == "Student Analysis":
         details,
         use_container_width=True,
         hide_index=True
-        
+    )
+
+    st.divider()
+    
