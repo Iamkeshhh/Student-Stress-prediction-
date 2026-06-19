@@ -85,19 +85,42 @@ def create_pdf_report(
 
     content.append(
         Paragraph(
-            f"<b>Predicted Risk:</b> {risk}",
+            f"<b>Model Used:</b> {model_name}",
             styles["BodyText"]
         )
     )
 
     content.append(
         Paragraph(
-            f"<b>Confidence:</b> {confidence:.2f}%",
+            f"<b>Risk Level:</b> {risk}",
             styles["BodyText"]
         )
     )
 
-    content.append(Spacer(1, 20))
+    content.append(
+        Paragraph(
+            f"<b>Prediction Confidence:</b> {confidence:.2f}%",
+            styles["BodyText"]
+        )
+    )
+
+    content.append(Spacer(1, 10))
+
+    content.append(
+        Paragraph(
+            "<b>Consultation Note</b>",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            consultation_note,
+            styles["BodyText"]
+        )
+    )
+
+    content.append(Spacer(1, 10))
 
     content.append(
         Paragraph(
@@ -108,7 +131,39 @@ def create_pdf_report(
 
     content.append(
         Paragraph(
-            recommendations,
+            recommendations.replace("\n", "<br/>"),
+            styles["BodyText"]
+        )
+    )
+
+    content.append(Spacer(1, 10))
+
+    content.append(
+        Paragraph(
+            "<b>Consultation Form Details</b>",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            consultation_details.replace("\n", "<br/>"),
+            styles["BodyText"]
+        )
+    )
+
+    content.append(Spacer(1, 10))
+
+    content.append(
+        Paragraph(
+            "<b>Student Information</b>",
+            styles["Heading2"]
+        )
+    )
+
+    content.append(
+        Paragraph(
+            student_details.replace("\n", "<br/>"),
             styles["BodyText"]
         )
     )
