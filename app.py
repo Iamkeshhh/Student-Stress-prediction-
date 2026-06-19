@@ -564,59 +564,22 @@ elif page == "Student Analysis":
                 "The student wellness team will contact you soon."
             )
 
-            # ---------------------------------------------------
-            # COMPLETE STUDENT DETAILS
-            # ---------------------------------------------------
+    # ---------------------------------------------------
+    # COMPLETE STUDENT DETAILS
+    # ---------------------------------------------------
 
-            st.subheader("📋 Complete Student Information")
+    st.subheader("📋 Complete Student Information")
 
-            details = pd.DataFrame({
-              "Feature": student.index,
-              "Value": student.values
-            })
+    details = pd.DataFrame({
+        "Feature": student.index,
+        "Value": student.values
+    })
 
-            st.dataframe(
-               details,
-               use_container_width=True,
-               hide_index=True
-            )
+    st.dataframe(
+        details,
+        use_container_width=True,
+        hide_index=True
+    )
 
-           
-            
-            =====================================
-            STUDENT MENTAL HEALTH REPORT
-            =====================================
-
-            Student Name:
-            {student['Student_Name']}
-
-            Model Used:
-            {model_choice}
-
-            Predicted Risk:
-            {risk}
-
-            Prediction Confidence:
-            {confidence:.2f}%
-
-
-            -------------------------------------
-            COUNSELING STATUS
-            -------------------------------------
-
-            {"Counseling Recommended" if risk in ["MEDIUM","HIGH"] else "Regular Monitoring"}
-
-            -------------------------------------
-            STUDENT DETAILS
-            -------------------------------------
-
-            for col in student.index:
-               report += f"\n{col}: {student[col]}"
-
-            st.download_button(
-               label="📄 Download Full Mental Health Report",
-               data=report,
-               file_name=f"{student['Student_Name']}_Mental_Health_Report.txt",
-               mime="text/plain"
-            )
-            st.divider()
+    st.divider()
+   
