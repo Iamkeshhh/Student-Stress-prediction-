@@ -579,7 +579,98 @@ elif page == "Student Analysis":
         details,
         use_container_width=True,
         hide_index=True
+        # =====================================
+# REPORT DOWNLOAD
+# =====================================
+
+st.subheader("📄 Download Assessment Report")
+
+if risk == "LOW":
+
+    recommendations = """
+Maintain a consistent sleep schedule.
+Exercise at least 30 minutes daily.
+Continue participating in social activities.
+Practice gratitude journaling.
+"""
+
+elif risk == "MEDIUM":
+
+    recommendations = """
+Follow a structured daily routine.
+Reduce academic overload.
+Practice mindfulness daily.
+Seek support from mentors and friends.
+"""
+
+else:
+
+    recommendations = """
+Immediate counseling recommended.
+Faculty intervention advised.
+Reduce academic pressure.
+Increase social support.
+Continuous monitoring required.
+Professional psychologist consultation advised.
+"""
+
+# Consultation Note
+
+if risk == "LOW":
+
+    consultation_note = (
+        "Low Risk: Preventive wellness guidance recommended."
     )
+
+elif risk == "MEDIUM":
+
+    consultation_note = (
+        "Medium Risk: Counseling session recommended."
+    )
+
+else:
+
+    consultation_note = (
+        "High Risk: Immediate counseling and intervention required."
+    )
+
+# Consultation Form Details
+
+consultation_details = f"""
+Student Email: {student_email if 'student_email' in locals() else 'Not Provided'}
+Preferred Date: {preferred_date if 'preferred_date' in locals() else 'Not Provided'}
+Concern: {concern if 'concern' in locals() else 'Not Provided'}
+"""
+
+# Student Details
+
+student_details = ""
+
+for col in student.index:
+
+    student_details += (
+        f"{col}: {student[col]}\n"
+    )
+
+pdf_file = create_pdf_report(
+    student_name=student["Student_Name"],
+    model_name=model_choice,
+    risk=risk,
+    confidence=confidence,
+    consultation_note=consultation_note,
+    recommendations=recommendations,
+    consultation_details=consultation_details,
+    student_details=student_details
+)
+
+st.download_button(
+    label="📥 Download Full Report",
+    data=pdf_file,
+    file_name=f"{student['Student_Name']}_Mental_Health_Report.pdf",
+    mime="application/pdf"
+)
+    )
+    
 
     st.divider()
    
