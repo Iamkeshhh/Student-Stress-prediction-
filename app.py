@@ -611,12 +611,12 @@ STUDENT DETAILS
 -------------------------------------
 """
 
-        for col in student.index:
-           report += f"\n{col}: {student[col]}"
+for col in student.index:
+    report += f"\n{col}: {student[col]}"
 
-        st.download_button(
-           label="📄 Download Full Mental Health Report",
-           data=report,
-           file_name=f"{student['Student_Name']}_Mental_Health_Report.txt",
-           mime="text/plain"
-    )
+st.download_button(
+    label="📄 Download Full Mental Health Report",
+    data=report,
+    file_name=f"{student['Student_Name']}_Mental_Health_Report.txt",
+    mime="text/plain"
+)
