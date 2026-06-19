@@ -582,7 +582,7 @@ elif page == "Student Analysis":
             )
 
            
-            report = f"""
+            
             =====================================
             STUDENT MENTAL HEALTH REPORT
             =====================================
