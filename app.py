@@ -625,7 +625,6 @@ elif page == "Student Analysis":
             -----------------
             {consultation_note}
 
-            """
 
             st.download_button(
             label="📥 Download Report",
